@@ -1,4 +1,7 @@
+# Python checkpoints
+.ipynb_checkpoints
 
+# Build output
 dist
 
 # Created by https://www.gitignore.io/api/osx,node
@@ -22,9 +25,6 @@ lib-cov
 
 # Coverage directory used by tools like istanbul
 coverage
-
-# nyc test coverage
-.nyc_output
 
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt

@@ -14,7 +14,7 @@
     ]
   },
   "keywords": [],
-  "author": "Jonathan Soma <jonathan.soma@gmail.com> (http://jonathansoma.com)",
+  "author": "Angela Wang, Julia Ledur, Sirui Zhu",
   "license": "ISC",
   "devDependencies": {
     "eslint": "^5.5.0",
