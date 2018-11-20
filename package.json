@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "start": "parcel src/index.html",
-    "build": "parcel build src/index.html --out-dir docs --public-url /d3-scrolly"
+    "build": "parcel build src/index.html --out-dir docs --public-url /hollywood-age-gap"
   },
   "jest": {
     "setupFiles": [
@@ -14,7 +14,7 @@
     ]
   },
   "keywords": [],
-  "author": "Angela Wang, Julia Ledur, Sirui Zhu",
+  "author": "Angela Wang, Julia Ledur, Matt Albasi, Sirui Zhu",
   "license": "ISC",
   "devDependencies": {
     "eslint": "^5.5.0",
