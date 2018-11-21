@@ -52,9 +52,20 @@ function ready (datapoints) {
     .data(datapoints)
     .enter()
     .append('circle')
+    .attr('class', 'couples')
+    .attr('id', d => {
+      var str = d.Director
+      str = str.replace(/\s+/g, '-').toLowerCase()
+      return str
+    })
     .attr('r', 3)
     .attr('cx', d => xPositionScale(+d['Actor 1 Age']))
     .attr('cy', d => yPositionScale(+d['Actor 2 Age']))
+    .attr('fill', d => {
+      // TO DO
+      // Color should change based on who is older, man or woman
+      console.log()
+    })
 
   // add a line for matching age
   svg
@@ -90,4 +101,75 @@ function ready (datapoints) {
     .append('g')
     .attr('class', 'axis y-axis')
     .call(yAxis)
+
+  // START STEPIN 
+
+  // reset circles 
+  d3.select('#top2').on('stepin', () => {
+    svg
+      .selectAll('.couples')
+      .transition()
+      .attr('stroke', 'black')
+      .attr('r', 3)
+  })
+
+  // # stepin bond (director==='john-glen' OR 'lewis-gilbert')
+  d3.select('#bond').on('stepin', () => {
+    svg
+      .selectAll('.couples')
+      .transition()
+      .attr('stroke', 'black')
+      .attr('r', 3)
+
+    svg
+      .selectAll('#john-glen, #lewis-gilbert')
+      .transition()
+      .attr('stroke', 'red')
+      .attr('r', 10)
+  })
+
+  // # stepin muade director === 'hal-ashby'
+  d3.select('#maude').on('stepin', () => {
+    svg
+      .selectAll('.couples')
+      .transition()
+      .attr('stroke', 'black')
+      .attr('r', 3)
+
+    svg
+      .selectAll('#hal-ashby')
+      .transition()
+      .attr('stroke', 'red')
+      .attr('r', 10)
+  })
+  // # stepin woody (director ==='woody-allen')
+
+  d3.select('#woody').on('stepin', () => {
+    svg
+      .selectAll('.couples')
+      .transition()
+      .attr('stroke', 'black')
+      .attr('r', 3)
+
+    svg
+      .selectAll('#woody-allen')
+      .transition()
+      .attr('stroke', 'red')
+      .attr('r', 10)
+  })
+
+  // setpin coen (director === 'joel-coen')
+  d3.select('#coen').on('stepin', () => {
+    svg
+      .selectAll('.couples')
+      .transition()
+      .attr('stroke', 'black')
+      .attr('r', 3)
+
+    svg
+      .selectAll('#joel-coen')
+      .transition()
+      .attr('stroke', 'red')
+      .attr('r', 10)
+  })
 }
