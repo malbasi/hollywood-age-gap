@@ -67,89 +67,50 @@ function ready (datapoints) {
   var dir1MovieName = dir1Datapoints.map(d => d['Movie Name'])
   yPositionScale.domain(dir1MovieName)
 
-  // place dot for actor 1 age
-
-  svg
-    .selectAll('act1')
-    .data(dir1Datapoints)
-    .enter()
-    .append('circle')
-    .attr('class', 'act1')
-    .attr('cx', d => {
-      var age = +d['Actor 1 Age']
-      return xPositionScale(age)
-    })
-    .attr('cy', d => {
-      return yPositionScale(d['Movie Name'])
-    })
-    .attr('r', 5)
-    .attr('fill', d => colorScale(d.Director))
-
-  // place dot for actor 2 age
-  svg
-    .selectAll('act2')
-    .data(dir1Datapoints)
-    .enter()
-    .append('circle')
-    .attr('class', 'act2')
-    .attr('cx', d => {
-      var age = +d['Actor 2 Age']
-      return xPositionScale(age)
-    })
-    .attr('cy', d => {
-      return yPositionScale(d['Movie Name'])
-    })
-    .attr('r', 5)
-    .attr('fill', d => colorScale(d.Director))
-
-  // place line between actors
-  svg
-    .selectAll('bar')
-    .data(dir1Datapoints)
-    .enter()
-    .append('line')
-    .attr('class', 'bar')
-    .attr('x1', d => {
-      return xPositionScale(+d['Actor 1 Age'])
-    })
-    .attr('y1', d => yPositionScale(d['Movie Name']))
-    .attr('x2', d => xPositionScale(+d['Actor 2 Age']))
-    .attr('y2', d => yPositionScale(d['Movie Name']))
-    .attr('stroke-width', 1)
-    .attr('stroke', d => colorScale(d.Director))
-    .attr('opacity', 0.5)
-
-  // place line for 18 y.o.
-  svg
-    .append('line')
-    .attr('x1', 50)
-    .attr('y1', 0)
-    .attr('x2', 50)
-    .attr('y2', height)
-    .attr('stroke-dasharray', ('3,5'))
-    .attr('stroke-width', 2)
-    .attr('stroke', 'red')
-    .attr('opacity', 0.5)
-    .lower()
-
-  /* Set up axes */
-  var xAxis = d3.axisBottom(xPositionScale)
-  svg
-    .append('g')
-    .attr('class', 'axis x-axis')
-    .attr('transform', 'translate(0,' + height + ')')
-    .call(xAxis)
-
-  var yAxis = d3.axisLeft(yPositionScale)
-  svg
-    .append('g')
-    .attr('class', 'axis y-axis')
-    .call(yAxis)
-
-  svg.selectAll('.y-axis path').attr('stroke', 'none')
-
   // Scrollytelling!
   // for each director, update the y-axis and redraw the barbells
+  d3.select('#top3').on('stepin', () => {
+    var dir1MovieName = dir1Datapoints.map(d => d['Movie Name'])
+    yPositionScale.domain(dir1MovieName)
+    svg.selectAll('.act1').transition().remove()
+    svg.selectAll('.act2').transition().remove()
+    svg.selectAll('.bar').transition().remove()
+    svg.selectAll('.y-axis').transition().remove()
+    svg.selectAll('.line').transition().remove()
+
+    // place line for 18 y.o.
+    svg
+      .append('line')
+      .transition()
+      .attr('x1', 50)
+      .attr('y1', 0)
+      .attr('x2', 50)
+      .attr('y2', height)
+      .attr('stroke-dasharray', ('3,5'))
+      .attr('stroke-width', 2)
+      .attr('stroke', 'red')
+      .attr('opacity', 0.5)
+      .lower()
+
+    /* Set up axes */
+    var xAxis = d3.axisBottom(xPositionScale)
+    svg
+      .append('g')
+      .transition()
+      .attr('class', 'axis x-axis')
+      .attr('transform', 'translate(0,' + height + ')')
+      .call(xAxis)
+
+    var yAxis = d3.axisLeft(yPositionScale)
+    svg
+      .append('g')
+      .transition()
+      .attr('class', 'axis y-axis')
+      .call(yAxis)
+
+    svg.selectAll('.y-axis path').attr('stroke', 'none')
+  })
+
   d3.select('#director1').on('stepin', () => {
     var dir1MovieName = dir1Datapoints.map(d => d['Movie Name'])
     yPositionScale.domain(dir1MovieName)
@@ -164,6 +125,7 @@ function ready (datapoints) {
       .enter()
       .append('circle')
       .attr('class', 'act1')
+      .transition()
       .attr('cx', d => {
         var age = +d['Actor 1 Age']
         return xPositionScale(age)
@@ -173,11 +135,12 @@ function ready (datapoints) {
       })
       .attr('r', 5)
       .attr('fill', d => colorScale(d.Director))
-      .exit().remove()
+
     svg.selectAll('act2')
       .data(dir1Datapoints)
       .enter()
       .append('circle')
+      .transition()
       .attr('class', 'act2')
       .attr('cx', d => {
         var age = +d['Actor 2 Age']
@@ -188,11 +151,12 @@ function ready (datapoints) {
       })
       .attr('r', 5)
       .attr('fill', d => colorScale(d.Director))
-      .exit().remove()
+
     svg.selectAll('bar')
       .data(dir1Datapoints)
       .enter()
       .append('line')
+      .transition()
       .attr('class', 'bar')
       .attr('x1', d => {
         return xPositionScale(+d['Actor 1 Age'])
@@ -203,12 +167,12 @@ function ready (datapoints) {
       .attr('stroke-width', 1)
       .attr('stroke', d => colorScale(d.Director))
       // .attr('opacity', 0.5)
-      .exit().remove()
 
     var yAxis = d3.axisLeft(yPositionScale)
     svg
       .append('g')
       .attr('class', 'axis y-axis')
+      .transition()
       .call(yAxis)
     svg.selectAll('.y-axis path').attr('stroke', 'none')
   })
@@ -227,6 +191,7 @@ function ready (datapoints) {
       .enter()
       .append('circle')
       .attr('class', 'act1')
+      .transition()
       .attr('cx', d => {
         var age = +d['Actor 1 Age']
         return xPositionScale(age)
@@ -236,13 +201,13 @@ function ready (datapoints) {
       })
       .attr('r', 5)
       .attr('fill', d => colorScale(d.Director))
-      .exit().remove()
 
     svg.selectAll('act2')
       .data(dir2Datapoints)
       .enter()
       .append('circle')
       .attr('class', 'act2')
+      .transition()
       .attr('cx', d => {
         var age = +d['Actor 2 Age']
         return xPositionScale(age)
@@ -252,11 +217,12 @@ function ready (datapoints) {
       })
       .attr('r', 5)
       .attr('fill', d => colorScale(d.Director))
-      .exit().remove()
+
     svg.selectAll('bar')
       .data(dir2Datapoints)
       .enter()
       .append('line')
+      .transition()
       .attr('class', 'bar')
       .attr('x1', d => {
         return xPositionScale(+d['Actor 1 Age'])
@@ -267,7 +233,6 @@ function ready (datapoints) {
       .attr('stroke-width', 1)
       .attr('stroke', d => colorScale(d.Director))
       .attr('opacity', 0.5)
-      .exit().remove()
 
     var yAxis = d3.axisLeft(yPositionScale)
     svg
@@ -291,6 +256,7 @@ function ready (datapoints) {
       .enter()
       .append('circle')
       .attr('class', 'act1')
+      .transition()
       .attr('cx', d => {
         var age = +d['Actor 1 Age']
         return xPositionScale(age)
@@ -306,6 +272,7 @@ function ready (datapoints) {
       .enter()
       .append('circle')
       .attr('class', 'act2')
+      .transition()
       .attr('cx', d => {
         var age = +d['Actor 2 Age']
         return xPositionScale(age)
@@ -315,12 +282,13 @@ function ready (datapoints) {
       })
       .attr('r', 5)
       .attr('fill', d => colorScale(d.Director))
-      .exit().remove()
+
     svg.selectAll('bar')
       .data(dir3Datapoints)
       .enter()
       .append('line')
       .attr('class', 'bar')
+      .transition()
       .attr('x1', d => {
         return xPositionScale(+d['Actor 1 Age'])
       })
@@ -353,6 +321,7 @@ function ready (datapoints) {
       .enter()
       .append('circle')
       .attr('class', 'act1')
+      .transition()
       .attr('cx', d => {
         var age = +d['Actor 1 Age']
         return xPositionScale(age)
@@ -362,13 +331,13 @@ function ready (datapoints) {
       })
       .attr('r', 5)
       .attr('fill', d => colorScale(d.Director))
-      .exit().remove()
 
     svg.selectAll('act2')
       .data(dir4Datapoints)
       .enter()
       .append('circle')
       .attr('class', 'act2')
+      .transition()
       .attr('cx', d => {
         var age = +d['Actor 2 Age']
         return xPositionScale(age)
@@ -378,12 +347,13 @@ function ready (datapoints) {
       })
       .attr('r', 5)
       .attr('fill', d => colorScale(d.Director))
-      .exit().remove()
+
     svg.selectAll('bar')
       .data(dir4Datapoints)
       .enter()
       .append('line')
       .attr('class', 'bar')
+      .transition()
       .attr('x1', d => {
         return xPositionScale(+d['Actor 1 Age'])
       })
@@ -393,7 +363,6 @@ function ready (datapoints) {
       .attr('stroke-width', 1)
       .attr('stroke', d => colorScale(d.Director))
       .attr('opacity', 0.5)
-      .exit().remove()
 
     var yAxis = d3.axisLeft(yPositionScale)
     svg
@@ -417,6 +386,7 @@ function ready (datapoints) {
       .enter()
       .append('circle')
       .attr('class', 'act1')
+      .transition()
       .attr('cx', d => {
         var age = +d['Actor 1 Age']
         return xPositionScale(age)
@@ -426,13 +396,13 @@ function ready (datapoints) {
       })
       .attr('r', 5)
       .attr('fill', d => colorScale(d.Director))
-      .exit().remove()
 
     svg.selectAll('act2')
       .data(dir5Datapoints)
       .enter()
       .append('circle')
       .attr('class', 'act2')
+      .transition()
       .attr('cx', d => {
         var age = +d['Actor 2 Age']
         return xPositionScale(age)
@@ -442,12 +412,13 @@ function ready (datapoints) {
       })
       .attr('r', 5)
       .attr('fill', d => colorScale(d.Director))
-      .exit().remove()
+
     svg.selectAll('bar')
       .data(dir5Datapoints)
       .enter()
       .append('line')
       .attr('class', 'bar')
+      .transition()
       .attr('x1', d => {
         return xPositionScale(+d['Actor 1 Age'])
       })
@@ -457,7 +428,6 @@ function ready (datapoints) {
       .attr('stroke-width', 1)
       .attr('stroke', d => colorScale(d.Director))
       .attr('opacity', 0.5)
-      .exit().remove()
 
     var yAxis = d3.axisLeft(yPositionScale)
     svg
