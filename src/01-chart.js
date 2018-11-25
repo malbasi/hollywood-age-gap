@@ -22,11 +22,11 @@ const svg = d3
 const colorScale = d3
   .scaleOrdinal()
   .range([
-    '#8dd3c7',
-    '#ffffb3',
-    '#bebada',
-    '#fb8072',
-    '#80b1d3',
+    '#BC5E21',
+    '#749CA8',
+    '#DBA946',
+    '#726738',
+    '#B38971',
     '#fdb462',
     '#b3de69'
   ])
@@ -133,7 +133,7 @@ function ready (datapoints) {
       .attr('cy', d => {
         return yPositionScale(d['Movie Name'])
       })
-      .attr('r', 5)
+      .attr('r', 6)
       .attr('fill', d => colorScale(d.Director))
 
     svg.selectAll('act2')
@@ -149,7 +149,7 @@ function ready (datapoints) {
       .attr('cy', d => {
         return yPositionScale(d['Movie Name'])
       })
-      .attr('r', 5)
+      .attr('r', 6)
       .attr('fill', d => colorScale(d.Director))
 
     svg.selectAll('bar')
@@ -199,7 +199,7 @@ function ready (datapoints) {
       .attr('cy', d => {
         return yPositionScale(d['Movie Name'])
       })
-      .attr('r', 5)
+      .attr('r', 6)
       .attr('fill', d => colorScale(d.Director))
 
     svg.selectAll('act2')
@@ -215,7 +215,7 @@ function ready (datapoints) {
       .attr('cy', d => {
         return yPositionScale(d['Movie Name'])
       })
-      .attr('r', 5)
+      .attr('r', 6)
       .attr('fill', d => colorScale(d.Director))
 
     svg.selectAll('bar')
@@ -264,7 +264,7 @@ function ready (datapoints) {
       .attr('cy', d => {
         return yPositionScale(d['Movie Name'])
       })
-      .attr('r', 5)
+      .attr('r', 6)
       .attr('fill', d => colorScale(d.Director))
 
     svg.selectAll('act2')
@@ -280,7 +280,7 @@ function ready (datapoints) {
       .attr('cy', d => {
         return yPositionScale(d['Movie Name'])
       })
-      .attr('r', 5)
+      .attr('r', 6)
       .attr('fill', d => colorScale(d.Director))
 
     svg.selectAll('bar')
@@ -329,7 +329,7 @@ function ready (datapoints) {
       .attr('cy', d => {
         return yPositionScale(d['Movie Name'])
       })
-      .attr('r', 5)
+      .attr('r', 6)
       .attr('fill', d => colorScale(d.Director))
 
     svg.selectAll('act2')
@@ -345,7 +345,7 @@ function ready (datapoints) {
       .attr('cy', d => {
         return yPositionScale(d['Movie Name'])
       })
-      .attr('r', 5)
+      .attr('r', 6)
       .attr('fill', d => colorScale(d.Director))
 
     svg.selectAll('bar')
@@ -394,7 +394,7 @@ function ready (datapoints) {
       .attr('cy', d => {
         return yPositionScale(d['Movie Name'])
       })
-      .attr('r', 5)
+      .attr('r', 6)
       .attr('fill', d => colorScale(d.Director))
 
     svg.selectAll('act2')
@@ -410,7 +410,7 @@ function ready (datapoints) {
       .attr('cy', d => {
         return yPositionScale(d['Movie Name'])
       })
-      .attr('r', 5)
+      .attr('r', 6)
       .attr('fill', d => colorScale(d.Director))
 
     svg.selectAll('bar')

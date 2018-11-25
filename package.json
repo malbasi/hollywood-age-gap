@@ -36,6 +36,7 @@
     "enter-view": "^1.0.0",
     "jest": "^23.6.0",
     "node-fetch": "^2.2.0",
+    "parcel": "^1.10.3",
     "topojson": "^3.0.2"
   }
 }

@@ -41,6 +41,12 @@ var yPositionScale = d3
   .range([height, 0])
   .domain([15, 80])
 
+var div = d3
+  .select('body')
+  .append('div')
+  .attr('class', 'tooltip')
+  .style('opacity', 0)
+
 d3.csv(require('./data/age_gap.csv'))
   .then(ready)
   .catch(err => console.log('Failed on', err))
@@ -61,10 +67,40 @@ function ready (datapoints) {
     .attr('r', 3)
     .attr('cx', d => xPositionScale(+d['Actor 1 Age']))
     .attr('cy', d => yPositionScale(+d['Actor 2 Age']))
-    .attr('fill', d => {
-      // TO DO
-      // Color should change based on who is older, man or woman
-      console.log()
+    .attr('fill', function (d) {
+      // color couples based on the older gender
+      if (+d['Actor 1 Age'] > +d['Actor 2 Age'] & d['Actor 1 Gender'] === 'man') {
+        return '#3C5A6A'
+      } else if (+d['Age Difference'] === 0) {
+        return '#D9A746'
+      } else {
+        return '#BC5E21'
+      }
+    })
+    .attr('opacity', 0.8)
+    .on('mouseover', function (d) {
+      // set up tooltip text
+      div
+        .transition()
+        .duration(200)
+        .style('opacity', 0.9)
+      div
+        .html(
+          d['Actor 1 Name'].bold() +
+            '<br/>' + ' ♡ ' + '<br/>' +
+            d['Actor 2 Name'].bold() +
+            '<br/>' + 'Age difference: ' +
+            d['Age Difference'] + '<br/>' +
+            'Movie: ' + d['Movie Name']
+        )
+        .style('left', d3.event.pageX + 'px')
+        .style('top', d3.event.pageY - 28 + 'px')
+    })
+    .on('mouseout', function (d) {
+      div
+        .transition()
+        .duration(500)
+        .style('opacity', 0)
     })
 
   // add a line for matching age
@@ -74,42 +110,54 @@ function ready (datapoints) {
     .attr('y1', height)
     .attr('x2', width)
     .attr('y2', 0)
-    .attr('stroke', 'red')
-    .attr('stroke-width', 2)
-    .attr('opacity', 0.5)
+    .attr('stroke', '#4B1803')
+    .attr('stroke-width', 1.8)
+    .attr('opacity', 0.7)
     .lower()
 
   // add text. This is garbage atm, but i forget how translate rotate works
   svg
     .append('text')
     .text('Actors are the same age')
+    .attr('font-weight', 'bold')
+    .attr('fill', '#4B1803')
     .attr('x', 350)
     .attr('y', 450)
     .attr('text-anchor', 'middle')
     .attr('transform', 'rotate(-45)')
 
   /* Set up axes */
-  var xAxis = d3.axisBottom(xPositionScale)
+  var xAxis = d3.axisBottom(xPositionScale).tickSize(-height)
   svg
     .append('g')
     .attr('class', 'axis x-axis')
     .attr('transform', 'translate(0,' + height + ')')
     .call(xAxis)
+    .attr('stroke-width', 0.1)
+    .attr('stroke', 'gray')
+    .lower()
 
-  var yAxis = d3.axisLeft(yPositionScale)
+  var yAxis = d3.axisLeft(yPositionScale).tickSize(-width)
   svg
     .append('g')
     .attr('class', 'axis y-axis')
     .call(yAxis)
+    // .attr('stroke-dasharray', '2,4')
+    .attr('stroke-width', 0.1)
+    .attr('stroke', 'gray')
+    .lower()
 
-  // START STEPIN 
+  // remove bounding box
+  svg.selectAll('.domain').remove()
 
-  // reset circles 
+  // START STEPIN
+
+  // reset circles
   d3.select('#top2').on('stepin', () => {
     svg
       .selectAll('.couples')
       .transition()
-      .attr('stroke', 'black')
+      .attr('stroke', 'none')
       .attr('r', 3)
   })
 
@@ -118,13 +166,13 @@ function ready (datapoints) {
     svg
       .selectAll('.couples')
       .transition()
-      .attr('stroke', 'black')
+      .attr('stroke', 'none')
       .attr('r', 3)
 
     svg
       .selectAll('#john-glen, #lewis-gilbert')
       .transition()
-      .attr('stroke', 'red')
+      .attr('stroke', 'black')
       .attr('r', 10)
   })
 
@@ -133,13 +181,13 @@ function ready (datapoints) {
     svg
       .selectAll('.couples')
       .transition()
-      .attr('stroke', 'black')
+      .attr('stroke', 'none')
       .attr('r', 3)
 
     svg
       .selectAll('#hal-ashby')
       .transition()
-      .attr('stroke', 'red')
+      .attr('stroke', 'black')
       .attr('r', 10)
   })
   // # stepin woody (director ==='woody-allen')
@@ -148,13 +196,13 @@ function ready (datapoints) {
     svg
       .selectAll('.couples')
       .transition()
-      .attr('stroke', 'black')
+      .attr('stroke', 'none')
       .attr('r', 3)
 
     svg
       .selectAll('#woody-allen')
       .transition()
-      .attr('stroke', 'red')
+      .attr('stroke', 'black')
       .attr('r', 10)
   })
 
@@ -163,13 +211,13 @@ function ready (datapoints) {
     svg
       .selectAll('.couples')
       .transition()
-      .attr('stroke', 'black')
+      .attr('stroke', 'none')
       .attr('r', 3)
 
     svg
       .selectAll('#joel-coen')
       .transition()
-      .attr('stroke', 'red')
+      .attr('stroke', 'black')
       .attr('r', 10)
   })
 }

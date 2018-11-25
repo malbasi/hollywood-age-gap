@@ -35,8 +35,8 @@
           }
           
           .dark-theme {
-              background-color: #808080;
-              color: #fcfbfb;   
+              background-color: #F9F5EC;
+              color: #292723;   
           }
         </style>
         <style>
@@ -74,13 +74,41 @@
           .step > h2, .step > h3 {
             background: rgba(255,255,255,0.9);
           }
+
+          /* Code to customize the tooltip */
+            .tooltip {	
+            position: absolute;			
+            text-align: center;							
+            padding: 10px;			
+            font-family: 'Open Sans', sans-serif;	
+            font: 14px sans-serif;		
+            background-color: #F9E0A8;	
+            border: 0px;		
+            border-radius: 8px;			
+            pointer-events: none;
+            vertical-align: middle;
+           }
+
+           img{
+            height:auto;
+            width:100%;
+            margin-left: 0%;
+            margin-right: 0%;
+            display: block;
+        }
+
         </style>
   </head>
   <body class ='dark-theme'>
+      <img class="image" src="images/hollywood-2.jpg" alt="image description"><br><br><br>
+
     <div class="container">
         <div class="row">
         <div class="col-sm-12 mt-5 mb-5">
-          <h1>Hall of Fame</h1>
+            <h1>HOLLYWOOD AGE GAPS</h1><br><br>
+
+            
+            <h1>Hall of Fame</h1>
         </div>
       </div>
 
@@ -100,32 +128,7 @@
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-sm-12 mt-5 mb-5">
-          <h1>Barbell plot</h1>
-        </div>
-      </div>
 
-      <div class="row mt-5 mb-5">
-          <div class="col-sm-12 step" id="top3">
-              <h1>Chart 1 </h1>
-          </div>
-          <div class="col-lg-8 sticky">
-            <div id="chart-1"></div>
-          </div>
-          <div class="col-lg-4">
-            <div class = 'step' id = 'director1'>
-            <p>Woody Allen</p>
-          </div>
-            <div class ='step' id ='director2'>
-              <p>John Glen</p>
-            </div>
-           <div class='step' id="director3"><p>Jonathan Lynn</p></div>
-           <div class='step' id="director4"><p>
-            Joel Coen</p></div>
-           <div class='step' id="director5"><p>Lewis Gilbert</p></div>
-          </div>
-        </div>
      <div class="row">
         <div class="col-sm-12 mt-5 mb-5">
           <h1>Scatter plot</h1>
@@ -141,15 +144,44 @@
         </div>
         <div class="col-lg-4">
           <div class = 'step' id = 'top2'>
-          <p>Here is a distribution of actors and their ages</p>
+          <p>Here is a distribution of actors and their ages. Usually, <span style="color: #0D364A; background: #d9d9d9; font-weight: bold">men are older than women</span> and the <span style="color: #D9A746; background: #d9d9d9; font-weight: bold">couples with the same age</span> are all younger than 40 years old.</p>
         </div>
           <div class ='step' id ='bond'>
             <p>stepin bond (director==='john-glen' OR 'lewis-gilbert')</p>
           </div>
-         <div class='step' id="maude"><p>stepin muade director === 'hal-ashby'</p></div>
+         <div class='step' id="maude"><p>stepin muade director === 'hal-ashby'. In the movie with the highest age gap, Harold and Maude, <span style="color: #BA5E21; background: #d9d9d9; font-weight: bold">the actress is older than the actor</span>.</p></div>
          <div class='step' id="woody"><p>stepin woody (director ==='woody-allen')</p></div>
          <div class='step' id="coen"><p>setpin coen (director === 'joel-coen')</p></div>
         </div>
+        </div>
+
+      
+        <div class="row">
+            <div class="col-sm-12 mt-5 mb-5">
+              <h1>Barbell plot</h1>
+            </div>
+          </div>
+    
+          <div class="row mt-5 mb-5">
+              <div class="col-sm-12 step" id="top3">
+                  <h1>Chart 1 </h1>
+              </div>
+              <div class="col-lg-8 sticky">
+                <div id="chart-1"></div>
+              </div>
+              <div class="col-lg-4">
+                <div class = 'step' id = 'director1'>
+                <p>Woody Allen</p>
+              </div>
+                <div class ='step' id ='director2'>
+                  <p>John Glen</p>
+                </div>
+               <div class='step' id="director3"><p>Jonathan Lynn</p></div>
+               <div class='step' id="director4"><p>
+                Joel Coen</p></div>
+               <div class='step' id="director5"><p>Lewis Gilbert</p></div>
+              </div>
+            </div>
       
     </div>
     <script scr="chart-hall.js"></script>
