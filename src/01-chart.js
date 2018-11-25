@@ -19,6 +19,8 @@ const svg = d3
   .append('g')
   .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
+var defs = svg.append('defs')
+
 const colorScale = d3
   .scaleOrdinal()
   .range([
@@ -37,9 +39,15 @@ var xPositionScale = d3.scaleLinear()
 
 var yPositionScale = d3
   .scalePoint()
-  .range([height - 20, 0])
+  .range([height, 100])
 
-d3.csv(require('./data/top_directors.csv'))
+var div = d3
+  .select('body')
+  .append('div')
+  .attr('class', 'tooltip')
+  .style('opacity', 0)
+
+d3.csv(require('./data/top_directors_withimg2.csv'))
   .then(ready)
   .catch(err => console.log('Failed on', err))
 
@@ -48,20 +56,84 @@ function ready (datapoints) {
   var directorName = datapoints.map(d => d['Director'])
   colorScale.domain(directorName)
 
-  // var nested = d3
-  //   .nest()
-  //   .key(d => d.Director)
-  //   .entries(datapoints)
-  // console.log(nested)
+  var nested = d3
+    .nest()
+    .key(d => d.Director)
+    .entries(datapoints)
 
-  // console.log(datapoints)
+  // sort nested data
+  nested.sort(function (b, a) {
+    return a.values.length - b.values.length
+  })
+
+  defs.selectAll('.director-pattern')
+    .data(datapoints)
+    .enter().append('pattern')
+    .attr('class', 'director-pattern')
+    .attr('id', function (d) {
+      console.log(d.Director.toLowerCase().replace(' ', ''))
+      return d.Director.toLowerCase().replace(' ', '')
+    })
+    .attr('height', '100%')
+    .attr('width', '100%')
+    .attr('patternContentUnits', 'objectBoundingBox')
+    .append('image')
+    .attr('height', '1')
+    .attr('width', '1')
+    .attr('preserveAspectRatio', 'none')
+    .attr('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    .attr('xlink:href', function (d) {
+      return d.image_path
+    })
+
+  // add label circles
+  let labels = svg.append('g').attr('transform', 'translate(10, 0)')
+
+  labels
+    .selectAll('.label-circle')
+    .data(nested)
+    .enter()
+    .append('g')
+    .attr('transform', (d, i) => `translate(${i * 120}, 0)`)
+    .each(function (d) {
+      let g = d3.select(this)
+      g.append('circle')
+        .attr('r', 40)
+        .attr('cx', 20)
+        .attr('cy', 20)
+        .attr('fill', function (d) {
+          console.log(d.key.toLowerCase().replace(/ /g, ''))
+          return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
+        })
+        .attr('class', d => {
+          return d.key.toLowerCase().replace(' ', '')
+        })
+        .classed('labels', true)
+        .attr('opacity', '0.2')
+    })
+
+  // draw the average line and hide it
+  // place line for 18 y.o.
+  svg
+    .append('line')
+    .attr('x1', 50)
+    .attr('y1', 100)
+    .attr('x2', 50)
+    .attr('y2', height)
+    .attr('stroke-dasharray', ('3,5'))
+    .attr('stroke-width', 2)
+    .attr('stroke', 'red')
+    .attr('class', 'average-line')
+    .attr('opacity', 0.5)
+    .lower()
+    .style('visibility', 'hidden')
 
   // filter the datapoints for each director
   let dir1Datapoints = datapoints.filter(d => d.Director === 'Woody Allen')
   let dir2Datapoints = datapoints.filter(d => d.Director === 'John Glen')
-  let dir3Datapoints = datapoints.filter(d => d.Director === 'Jonathan Lynn')
+  let dir3Datapoints = datapoints.filter(d => d.Director === 'Lewis Gilbert')
   let dir4Datapoints = datapoints.filter(d => d.Director === 'Joel Coen')
-  let dir5Datapoints = datapoints.filter(d => d.Director === 'Lewis Gilbert')
+  let dir5Datapoints = datapoints.filter(d => d.Director === 'Jonathan Lynn')
 
   // set yPositionScale domain
   var dir1MovieName = dir1Datapoints.map(d => d['Movie Name'])
@@ -76,21 +148,7 @@ function ready (datapoints) {
     svg.selectAll('.act2').transition().remove()
     svg.selectAll('.bar').transition().remove()
     svg.selectAll('.y-axis').transition().remove()
-    svg.selectAll('.line').transition().remove()
-
-    // place line for 18 y.o.
-    svg
-      .append('line')
-      .transition()
-      .attr('x1', 50)
-      .attr('y1', 0)
-      .attr('x2', 50)
-      .attr('y2', height)
-      .attr('stroke-dasharray', ('3,5'))
-      .attr('stroke-width', 2)
-      .attr('stroke', 'red')
-      .attr('opacity', 0.5)
-      .lower()
+    svg.selectAll('.average-line').transition().style('visibility', 'visible')
 
     /* Set up axes */
     var xAxis = d3.axisBottom(xPositionScale)
@@ -168,6 +226,16 @@ function ready (datapoints) {
       .attr('stroke', d => colorScale(d.Director))
       // .attr('opacity', 0.5)
 
+    // this is change for label part!
+    svg.selectAll('.labels').transition().attr('opacity', 0.2).attr('fill', function (d) {
+      // console.log(d.key.toLowerCase().replace(/ /g, ''))
+      return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
+    })
+
+    svg.selectAll('.woodyallen')
+      .transition()
+      .attr('opacity', 0.9)
+
     var yAxis = d3.axisLeft(yPositionScale)
     svg
       .append('g')
@@ -234,6 +302,14 @@ function ready (datapoints) {
       .attr('stroke', d => colorScale(d.Director))
       .attr('opacity', 0.5)
 
+    svg.selectAll('.labels').transition().attr('opacity', 0.2).attr('fill', function (d) {
+      // console.log(d.key.toLowerCase().replace(/ /g, ''))
+      return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
+    })
+    svg.selectAll('.johnglen')
+      .transition()
+      .attr('opacity', 0.9)
+
     var yAxis = d3.axisLeft(yPositionScale)
     svg
       .append('g')
@@ -298,6 +374,14 @@ function ready (datapoints) {
       .attr('stroke-width', 1)
       .attr('stroke', d => colorScale(d.Director))
       .attr('opacity', 0.5)
+
+    svg.selectAll('.labels').transition().attr('opacity', 0.2).attr('fill', function (d) {
+      // console.log(d.key.toLowerCase().replace(/ /g, ''))
+      return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
+    })
+    svg.selectAll('.lewisgilbert')
+      .transition()
+      .attr('opacity', 0.9)
 
     var yAxis = d3.axisLeft(yPositionScale)
     svg
@@ -364,6 +448,14 @@ function ready (datapoints) {
       .attr('stroke', d => colorScale(d.Director))
       .attr('opacity', 0.5)
 
+    svg.selectAll('.labels').transition().attr('opacity', 0.2).attr('fill', function (d) {
+      // console.log(d.key.toLowerCase().replace(/ /g, ''))
+      return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
+    })
+    svg.selectAll('.joelcoen')
+      .transition()
+      .attr('opacity', 0.9)
+
     var yAxis = d3.axisLeft(yPositionScale)
     svg
       .append('g')
@@ -428,6 +520,14 @@ function ready (datapoints) {
       .attr('stroke-width', 1)
       .attr('stroke', d => colorScale(d.Director))
       .attr('opacity', 0.5)
+
+    svg.selectAll('.labels').transition().attr('opacity', 0.2).attr('fill', function (d) {
+      // console.log(d.key.toLowerCase().replace(/ /g, ''))
+      return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
+    })
+    svg.selectAll('.jonathanlynn')
+      .transition()
+      .attr('opacity', 0.9)
 
     var yAxis = d3.axisLeft(yPositionScale)
     svg
