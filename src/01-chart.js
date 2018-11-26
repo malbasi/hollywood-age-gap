@@ -128,7 +128,7 @@ function ready (datapoints) {
           } else if (d.key === 'Lowis Gilbert') {
             return 0
           } else if (d.key === 'Jonathan Lynn') {
-            return 20
+            return 15
           } else {
             return 0
           }
