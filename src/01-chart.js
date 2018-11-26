@@ -120,7 +120,7 @@ function ready (datapoints) {
       let g = d3.select(this)
       g.append('text')
         .attr('x', 0)
-        .attr('dx', d=> {
+        .attr('dx', d => {
           if (d.key === 'Woody Allen') {
             return -15
           } else if (d.key === 'Joel Coen') {
@@ -136,13 +136,13 @@ function ready (datapoints) {
         .attr('y', 30)
         .attr('fill', colorScale(d.key))
         .attr('class', d => {
-          return 'text' + d.key.toLowerCase().replace(' ', '') 
+          return 'text' + d.key.toLowerCase().replace(' ', '')
         })
         .classed('labels-text', true)
         .text(d.key)
         .attr('font-size', 12)
         .attr('font-weight', 'bold')
-        .attr('text-alignment','middle')
+        .attr('text-alignment', 'middle')
         .attr('opacity', 0.2)
     })
 
@@ -162,14 +162,14 @@ function ready (datapoints) {
     .lower()
     .style('visibility', 'hidden')
 
-    var xAxis = d3.axisBottom(xPositionScale)
-    svg
-      .append('g')
-      .transition()
-      .attr('class', 'axis x-axis')
-      .attr('transform', 'translate(0,' + height + ')')
-      .call(xAxis)
-      .style('visibility', 'hidden')
+  var xAxis = d3.axisBottom(xPositionScale)
+  svg
+    .append('g')
+    .transition()
+    .attr('class', 'axis x-axis')
+    .attr('transform', 'translate(0,' + height + ')')
+    .call(xAxis)
+    .style('visibility', 'hidden')
 
   // filter the datapoints for each director
   let dir1Datapoints = datapoints.filter(d => d.Director === 'Woody Allen')
@@ -182,66 +182,66 @@ function ready (datapoints) {
   var dir1MovieName = dir1Datapoints.map(d => d['Movie Name'])
   yPositionScale.domain(dir1MovieName)
 
-    svg
-      .selectAll('act1')
-      .data(dir1Datapoints)
-      .enter()
-      .append('circle')
-      .attr('class', 'act1')
-      .transition()
-      .attr('cx', d => {
-        var age = +d['Actor 1 Age']
-        return xPositionScale(age)
-      })
-      .attr('cy', d => {
-        return yPositionScale(d['Movie Name'])
-      })
-      .attr('r', 6)
-      .attr('fill', d => colorScale(d.Director))
-      .style('visibility','hidden')
+  svg
+    .selectAll('act1')
+    .data(dir1Datapoints)
+    .enter()
+    .append('circle')
+    .attr('class', 'act1')
+    .transition()
+    .attr('cx', d => {
+      var age = +d['Actor 1 Age']
+      return xPositionScale(age)
+    })
+    .attr('cy', d => {
+      return yPositionScale(d['Movie Name'])
+    })
+    .attr('r', 6)
+    .attr('fill', d => colorScale(d.Director))
+    .style('visibility', 'hidden')
 
-    svg.selectAll('act2')
-      .data(dir1Datapoints)
-      .enter()
-      .append('circle')
-      .attr('class', 'act2')
-      .transition()
-      .attr('cx', d => {
-        var age = +d['Actor 2 Age']
-        return xPositionScale(age)
-      })
-      .attr('cy', d => {
-        return yPositionScale(d['Movie Name'])
-      })
-      .attr('r', 6)
-      .attr('fill', d => colorScale(d.Director))
-      .style('visibility','hidden')
+  svg.selectAll('act2')
+    .data(dir1Datapoints)
+    .enter()
+    .append('circle')
+    .attr('class', 'act2')
+    .transition()
+    .attr('cx', d => {
+      var age = +d['Actor 2 Age']
+      return xPositionScale(age)
+    })
+    .attr('cy', d => {
+      return yPositionScale(d['Movie Name'])
+    })
+    .attr('r', 6)
+    .attr('fill', d => colorScale(d.Director))
+    .style('visibility', 'hidden')
 
-    svg.selectAll('bar')
-      .data(dir1Datapoints)
-      .enter()
-      .append('line')
-      .transition()
-      .attr('class', 'bar')
-      .attr('x1', d => {
-        return xPositionScale(+d['Actor 1 Age'])
-      })
-      .attr('y1', d => yPositionScale(d['Movie Name']))
-      .attr('x2', d => xPositionScale(+d['Actor 2 Age']))
-      .attr('y2', d => yPositionScale(d['Movie Name']))
-      .attr('stroke-width', 1)
-      .attr('stroke', d => colorScale(d.Director))
-      .attr('opacity', 0.5)
-      .style('visibility','hidden')
+  svg.selectAll('bar')
+    .data(dir1Datapoints)
+    .enter()
+    .append('line')
+    .transition()
+    .attr('class', 'bar')
+    .attr('x1', d => {
+      return xPositionScale(+d['Actor 1 Age'])
+    })
+    .attr('y1', d => yPositionScale(d['Movie Name']))
+    .attr('x2', d => xPositionScale(+d['Actor 2 Age']))
+    .attr('y2', d => yPositionScale(d['Movie Name']))
+    .attr('stroke-width', 1)
+    .attr('stroke', d => colorScale(d.Director))
+    .attr('opacity', 0.5)
+    .style('visibility', 'hidden')
 
   // Scrollytelling!
   // for each director, update the y-axis and redraw the barbells
   d3.select('#top3').on('stepin', () => {
     var dir1MovieName = dir1Datapoints.map(d => d['Movie Name'])
     yPositionScale.domain(dir1MovieName)
-    svg.selectAll('.act1').transition().style('visibility','hidden')
-    svg.selectAll('.act2').transition().style('visibility','hidden')
-    svg.selectAll('.bar').transition().style('visibility','hidden')
+    svg.selectAll('.act1').transition().style('visibility', 'hidden')
+    svg.selectAll('.act2').transition().style('visibility', 'hidden')
+    svg.selectAll('.bar').transition().style('visibility', 'hidden')
     svg.selectAll('.y-axis').transition().remove()
     svg.selectAll('.average-line').transition().style('visibility', 'hidden')
     svg.selectAll('.x-axis').transition().style('visibility', 'hidden')
@@ -252,14 +252,13 @@ function ready (datapoints) {
       return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
     })
     svg.selectAll('.woodyallen')
-       .transition()
-       .attr('opacity', 0.2)
-    
-    svg.selectAll('.labels-text').transition().attr('opacity', 0.2).attr('fill', d=> colorScale(d.key))
-    svg.selectAll('.textwoodyallen')
-       .transition()
-       .attr('opacity', 0.2)
+      .transition()
+      .attr('opacity', 0.2)
 
+    svg.selectAll('.labels-text').transition().attr('opacity', 0.2).attr('fill', d => colorScale(d.key))
+    svg.selectAll('.textwoodyallen')
+      .transition()
+      .attr('opacity', 0.2)
 
     /* Set up axes */
     var xAxis = d3.axisBottom(xPositionScale)
@@ -271,7 +270,6 @@ function ready (datapoints) {
       .call(xAxis)
       .style('visibility', 'hidden')
 
-
     var yAxis = d3.axisLeft(yPositionScale)
     svg
       .append('g')
@@ -282,7 +280,6 @@ function ready (datapoints) {
 
     svg.selectAll('.y-axis path').attr('stroke', 'none')
   })
-
 
   d3.select('#director1').on('stepin', () => {
     var dir1MovieName = dir1Datapoints.map(d => d['Movie Name'])
@@ -341,7 +338,6 @@ function ready (datapoints) {
       .attr('stroke-width', 1)
       .attr('stroke', d => colorScale(d.Director))
 
-
     // this is change for label part!
     svg.selectAll('.labels').transition().attr('opacity', 0.2).attr('fill', function (d) {
       return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
@@ -351,10 +347,10 @@ function ready (datapoints) {
       .transition()
       .attr('opacity', 0.9)
 
-    svg.selectAll('.labels-text').transition().attr('opacity', 0.2).attr('fill', d=> colorScale(d.key))
+    svg.selectAll('.labels-text').transition().attr('opacity', 0.2).attr('fill', d => colorScale(d.key))
     svg.selectAll('.textwoodyallen')
-       .transition()
-       .attr('opacity', 0.9)
+      .transition()
+      .attr('opacity', 0.9)
 
     var yAxis = d3.axisLeft(yPositionScale)
     svg
@@ -431,10 +427,10 @@ function ready (datapoints) {
       .transition()
       .attr('opacity', 0.9)
 
-    svg.selectAll('.labels-text').transition().attr('opacity', 0.2).attr('fill', d=> colorScale(d.key))
+    svg.selectAll('.labels-text').transition().attr('opacity', 0.2).attr('fill', d => colorScale(d.key))
     svg.selectAll('.textjohnglen')
-       .transition()
-       .attr('opacity', 0.9)
+      .transition()
+      .attr('opacity', 0.9)
 
     var yAxis = d3.axisLeft(yPositionScale)
     svg
@@ -510,10 +506,10 @@ function ready (datapoints) {
       .transition()
       .attr('opacity', 0.9)
 
-    svg.selectAll('.labels-text').transition().attr('opacity', 0.2).attr('fill', d=> colorScale(d.key))
+    svg.selectAll('.labels-text').transition().attr('opacity', 0.2).attr('fill', d => colorScale(d.key))
     svg.selectAll('.textlewisgilbert')
-       .transition()
-       .attr('opacity', 0.9)
+      .transition()
+      .attr('opacity', 0.9)
 
     var yAxis = d3.axisLeft(yPositionScale)
     svg
@@ -589,10 +585,10 @@ function ready (datapoints) {
       .transition()
       .attr('opacity', 0.9)
 
-    svg.selectAll('.labels-text').transition().attr('opacity', 0.2).attr('fill', d=> colorScale(d.key))
+    svg.selectAll('.labels-text').transition().attr('opacity', 0.2).attr('fill', d => colorScale(d.key))
     svg.selectAll('.textjoelcoen')
-       .transition()
-       .attr('opacity', 0.9)
+      .transition()
+      .attr('opacity', 0.9)
 
     var yAxis = d3.axisLeft(yPositionScale)
     svg
@@ -668,10 +664,10 @@ function ready (datapoints) {
       .transition()
       .attr('opacity', 0.9)
 
-    svg.selectAll('.labels-text').transition().attr('opacity', 0.2).attr('fill', d=> colorScale(d.key))
+    svg.selectAll('.labels-text').transition().attr('opacity', 0.2).attr('fill', d => colorScale(d.key))
     svg.selectAll('.textjonathanlynn')
-       .transition()
-       .attr('opacity', 0.9)
+      .transition()
+      .attr('opacity', 0.9)
 
     var yAxis = d3.axisLeft(yPositionScale)
     svg
