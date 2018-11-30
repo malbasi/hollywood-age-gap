@@ -18,6 +18,14 @@
             top: 0;
           }
 
+          .body {
+            text-align: center;
+          }
+
+          .gallery {
+            position: center;
+          }
+
           h1 {
             text-align: center;
           }

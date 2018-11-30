@@ -2,10 +2,10 @@ import * as d3 from 'd3'
 import fisheye from './fisheye'
 import { scaleLinear, scalePow } from 'd3-scale'
 
-let margin = { top: 20, left: 50, right: 20, bottom: 20 }
+let margin = { top: 20, left: 20, right: 20, bottom: 20 }
 
-let height = 226 - margin.top - margin.bottom
-let width = 700 - margin.left - margin.right
+let height = 300 - margin.top - margin.bottom
+let width = 900 - margin.left - margin.right
 
 let svg = d3
   .select('#images')
@@ -23,7 +23,7 @@ svg.append('rect')
 var xPositionScale = fisheye.scale(d3.scaleLinear)
   .range([0, width])
   .focus(width / 2)
-  .distortion(2.5)
+  .distortion(5)
 
 // var colorScale = d3.scaleOrdinal(d3.schemeCategory10)
 
@@ -52,10 +52,20 @@ function ready (datapoints) {
     .attr('height', height)
 
   holders.append('rect')
-    .attr('stroke', 'black')
+    .attr('stroke', 'none')
     .attr('height', height)
     .attr('width', 150)
     .attr('fill', 'none')
+    .on('mousemove', function (d) {
+      // var number = d.TotalPageViews
+      d3.select(this)
+
+      d3.select('#movie-name').text(d['Movie Name'])
+      d3.select('#actor-1').text(d['Actor 1 Name'])
+      d3.select('#actor-2').text(d['Actor 2 Name'])
+      d3.select('#age').text(d['Actor 1 Age'])
+      d3.select('#info').style('display', 'block')
+    })
 
   function clamp (num, min, max) {
     return Math.max(min, Math.min(max, num))
