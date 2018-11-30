@@ -1,6 +1,6 @@
 import * as d3 from 'd3'
-import fisheye from 'fisheye'
-
+import fisheye from './fisheye'
+import { scaleLinear, scalePow } from 'd3-scale'
 
 let margin = { top: 20, left: 50, right: 20, bottom: 20 }
 
@@ -20,10 +20,10 @@ svg.append('rect')
   .attr('height', height)
   .attr('opacity', 0)
 
-var xPositionScale = d3.scaleLinear()
+var xPositionScale = fisheye.scale(d3.scaleLinear)
   .range([0, width])
-// .focus(width / 2)
-// .distortion(4)
+  .focus(width / 2)
+  .distortion(2.5)
 
 // var colorScale = d3.scaleOrdinal(d3.schemeCategory10)
 
