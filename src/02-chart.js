@@ -153,13 +153,17 @@ function ready (datapoints) {
   // START STEPIN
 
   // reset circles
-  d3.select('#top2').on('stepin', () => {
+  d3.select('#intro').on('stepin', () => {
     svg
       .selectAll('.couples')
       .transition()
       .attr('stroke', 'none')
       .attr('r', 3)
   })
+
+  // highlight same age
+
+  // HGIHLIGHT COUPLES WITH THE SAME AGE HERE
 
   // # stepin bond (director==='john-glen' OR 'lewis-gilbert')
   d3.select('#bond').on('stepin', () => {
