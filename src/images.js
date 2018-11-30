@@ -27,7 +27,7 @@ var xPositionScale = fisheye.scale(d3.scaleLinear)
 
 // var colorScale = d3.scaleOrdinal(d3.schemeCategory10)
 
-d3.csv(require('./data/mackerel.csv'))
+d3.csv(require('./data/same-age.csv'))
   .then(ready)
   .catch(err => console.log('Failed on', err))
 
