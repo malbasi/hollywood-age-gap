@@ -5,7 +5,7 @@ const margin = {
   top: 30,
   right: 20,
   bottom: 30,
-  left: 30
+  left: 65
 }
 
 const width = 700 - margin.left - margin.right
@@ -19,27 +19,27 @@ const svg = d3
   .append('g')
   .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
-const colorScale = d3
-  .scaleOrdinal()
-  .range([
-    '#8dd3c7',
-    '#ffffb3',
-    '#bebada',
-    '#fb8072',
-    '#80b1d3',
-    '#fdb462',
-    '#b3de69'
-  ])
+// const colorScale = d3
+//   .scaleOrdinal()
+//   .range([
+//     '#8dd3c7',
+//     '#ffffb3',
+//     '#bebada',
+//     '#fb8072',
+//     '#80b1d3',
+//     '#fdb462',
+//     '#b3de69'
+//   ])
 
 var xPositionScale = d3
   .scaleLinear()
   .range([0, width])
-  .domain([15, 80])
+  .domain([15, 85])
 
 var yPositionScale = d3
   .scaleLinear()
   .range([height, 0])
-  .domain([15, 80])
+  .domain([15, 85])
 
 var div = d3
   .select('body')
@@ -86,9 +86,9 @@ function ready (datapoints) {
         .style('opacity', 0.9)
       div
         .html(
-          d['Actor 1 Name'].bold() +
+          d['Actor 1 Name'].bold() + ' (' + d['Actor 1 Age'] + ' y.o.)' +
             '<br/>' + ' ♡ ' + '<br/>' +
-            d['Actor 2 Name'].bold() +
+            d['Actor 2 Name'].bold() + ' (' + d['Actor 2 Age'] + ' y.o.)' +
             '<br/>' + 'Age difference: ' +
             d['Age Difference'] + '<br/>' +
             'Movie: ' + d['Movie Name']
@@ -103,54 +103,76 @@ function ready (datapoints) {
         .style('opacity', 0)
     })
 
-  // add a line for matching age
-  svg
-    .append('line')
-    .attr('x1', 0)
-    .attr('y1', height)
-    .attr('x2', width)
-    .attr('y2', 0)
-    .attr('stroke', '#4B1803')
-    .attr('stroke-width', 1.8)
-    .attr('opacity', 0.7)
-    .lower()
-
-  // add text. This is garbage atm, but i forget how translate rotate works
-  svg
-    .append('text')
-    .text('Actors are the same age')
-    .attr('font-weight', 'bold')
-    .attr('fill', '#4B1803')
-    .attr('x', 350)
-    .attr('y', 450)
-    .attr('text-anchor', 'middle')
-    .attr('transform', 'rotate(-45)')
-
   /* Set up axes */
-  var xAxis = d3.axisBottom(xPositionScale).tickSize(-height)
+  var xAxis = d3
+    .axisBottom(xPositionScale)
+    .ticks(5)
+    .tickFormat(d => {
+      if (+d === 80) {
+        return d + ' years old'
+      } else {
+        return d
+      }
+    })
+    .tickSize(-height)
+    .tickPadding(10)
+
   svg
     .append('g')
     .attr('class', 'axis x-axis')
     .attr('transform', 'translate(0,' + height + ')')
     .call(xAxis)
     .attr('stroke-width', 0.1)
-    .attr('stroke', 'gray')
+    .attr('stroke', 'lightgrey')
     .lower()
 
-  var yAxis = d3.axisLeft(yPositionScale).tickSize(-width)
+  var yAxis = d3
+    .axisLeft(yPositionScale)
+    .ticks(5)
+    .tickFormat(d => {
+      if (+d === 80) {
+        return d + " years old"
+      } else {
+        return d
+      }
+    })
+    .tickSize(-width)
+    .tickPadding(10)
+
   svg
     .append('g')
     .attr('class', 'axis y-axis')
     .call(yAxis)
-    // .attr('stroke-dasharray', '2,4')
     .attr('stroke-width', 0.1)
-    .attr('stroke', 'gray')
+    .attr('stroke', 'lightgrey')
     .lower()
 
   // remove bounding box
   svg.selectAll('.domain').remove()
 
   // START STEPIN
+  // add text. Transform translate is based on x and y pos scales
+  svg
+    .append('text')
+    .text('Actors are the same age')
+    .attr('class', 'textLine')
+    .attr('font-weight', 'bold')
+    .attr('fill', '#4B1803')
+    .attr('x', 10)
+    .attr('y', 0)
+    .attr('text-anchor', 'middle')
+    .attr('transform', 'translate(' + xPositionScale(75) + ',' + yPositionScale(76) + ') rotate(-45)')
+    .attr('opacity', 0)
+
+  // add age line
+  svg
+    .append('line')
+    .attr('class', 'ageLine')
+    .attr('x1', 0)
+    .attr('y1', height)
+    .attr('x2', 0)
+    .attr('y2', height)
+    .lower()
 
   // reset circles
   d3.select('#intro').on('stepin', () => {
@@ -159,11 +181,63 @@ function ready (datapoints) {
       .transition()
       .attr('stroke', 'none')
       .attr('r', 3)
+
+    // reset line
+    svg
+      .select('.ageLine')
+      .transition()
+      .duration(2000)
+      .attr('x1', 0)
+      .attr('y1', height)
+      .attr('x2', 0)
+      .attr('y2', height)
+
+    // reset line text
+    svg
+      .select('.textLine')
+      .transition()
+      .duration(2000)
+      .attr('opacity', 0)
   })
 
   // highlight same age
+  d3.select('#same-age').on('stepin', () => {
+    // add a line for matching age
+    svg
+      .select('.ageLine')
+      .transition()
+      .duration(2000)
+      .attr('y2', 0)
+      .attr('x2', width)
+      .attr('stroke', '#4B1803')
+      .attr('stroke-width', 1.8)
+      .attr('opacity', 0.7)
 
-  // HGIHLIGHT COUPLES WITH THE SAME AGE HERE
+    svg
+      .select('.textLine')
+      .transition()
+      .duration(2000)
+      .attr('opacity', 1)
+
+    // HGIHLIGHT COUPLES WITH THE SAME AGE HERE
+    svg
+      .selectAll('.couples')
+      .transition()
+      .attr('r', d => {
+        if (+d['Age Difference'] === 0) {
+          return 10
+        } else {
+          return 3
+        }
+      })
+      .attr('stroke', d => {
+        if (+d['Age Difference'] === 0) {
+          return 'black'
+        } else {
+          return 'none'
+        }
+      })
+  })
 
   // # stepin bond (director==='john-glen' OR 'lewis-gilbert')
   d3.select('#bond').on('stepin', () => {
