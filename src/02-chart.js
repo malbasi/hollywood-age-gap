@@ -186,7 +186,6 @@ function ready (datapoints) {
     svg
       .select('.ageLine')
       .transition()
-      .duration(2000)
       .attr('x1', 0)
       .attr('y1', height)
       .attr('x2', 0)
@@ -196,7 +195,6 @@ function ready (datapoints) {
     svg
       .select('.textLine')
       .transition()
-      .duration(2000)
       .attr('opacity', 0)
   })
 
@@ -206,7 +204,7 @@ function ready (datapoints) {
     svg
       .select('.ageLine')
       .transition()
-      .duration(2000)
+      .duration(600)
       .attr('y2', 0)
       .attr('x2', width)
       .attr('stroke', '#4B1803')
@@ -216,7 +214,7 @@ function ready (datapoints) {
     svg
       .select('.textLine')
       .transition()
-      .duration(2000)
+      .duration(600)
       .attr('opacity', 1)
 
     // HGIHLIGHT COUPLES WITH THE SAME AGE HERE
