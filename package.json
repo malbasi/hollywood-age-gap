@@ -36,7 +36,6 @@
     "enter-view": "^1.0.0",
     "fisheye": "^1.0.2",
     "jest": "^23.6.0",
-    "mathjs": "^5.3.1",
     "node-fetch": "^2.2.0",
     "parcel": "^1.10.3",
     "parcel-plugin-static-files-copy": "^1.2.4",

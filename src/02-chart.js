@@ -131,7 +131,7 @@ function ready (datapoints) {
     .ticks(5)
     .tickFormat(d => {
       if (+d === 80) {
-        return d + " years old"
+        return d + ' years old'
       } else {
         return d
       }
@@ -198,6 +198,27 @@ function ready (datapoints) {
       .attr('opacity', 0)
   })
 
+  d3.select('#older-men').on('stepin', () => {
+    svg
+      .selectAll('.couples')
+      .transition()
+      .attr('r', 3)
+      // .attr('r', d => {
+      //   if (+d['Actor 1 Age'] > +d['Actor 2 Age'] & d['Actor 1 Gender'] === 'man') {
+      //     return 10
+      //   } else {
+      //     return 3
+      //   }
+      // })
+      .attr('stroke', d => {
+        if (+d['Actor 1 Age'] > +d['Actor 2 Age'] & d['Actor 1 Gender'] === 'man') {
+          return 'red'
+        } else {
+          return 'none'
+        }
+      })
+  })
+
   // highlight same age
   d3.select('#same-age').on('stepin', () => {
     // add a line for matching age
@@ -235,6 +256,11 @@ function ready (datapoints) {
           return 'none'
         }
       })
+  })
+
+  // highlight LGBT
+  d3.select('#lgbt').on('stepin', () => {
+
   })
 
   // # stepin bond (director==='john-glen' OR 'lewis-gilbert')
