@@ -64,7 +64,7 @@ function ready (datapoints) {
       str = str.replace(/\s+/g, '-').toLowerCase()
       return str
     })
-    .attr('r', 3)
+    .attr('r', 0)
     .attr('cx', d => xPositionScale(+d['Actor 1 Age']))
     .attr('cy', d => yPositionScale(+d['Actor 2 Age']))
     .attr('fill', function (d) {
@@ -124,6 +124,7 @@ function ready (datapoints) {
     .call(xAxis)
     .attr('stroke-width', 0.1)
     .attr('stroke', 'lightgrey')
+    .style('visibility', 'hidden')
     .lower()
 
   var yAxis = d3
@@ -145,6 +146,7 @@ function ready (datapoints) {
     .call(yAxis)
     .attr('stroke-width', 0.1)
     .attr('stroke', 'lightgrey')
+    .style('visibility', 'hidden')
     .lower()
 
   // remove bounding box
@@ -174,8 +176,15 @@ function ready (datapoints) {
     .attr('y2', height)
     .lower()
 
-  // reset circles
+
   d3.select('#intro').on('stepin', () => {
+    // unhide axis
+    svg
+      .selectAll('.axis')
+      .transition()
+      .style('visibility', 'visible')
+    
+    // reset circles
     svg
       .selectAll('.couples')
       .transition()
@@ -202,17 +211,16 @@ function ready (datapoints) {
     svg
       .selectAll('.couples')
       .transition()
-      .attr('r', 3)
-      // .attr('r', d => {
-      //   if (+d['Actor 1 Age'] > +d['Actor 2 Age'] & d['Actor 1 Gender'] === 'man') {
-      //     return 10
-      //   } else {
-      //     return 3
-      //   }
-      // })
+      .attr('r', d => {
+        if (+d['Actor 1 Age'] > +d['Actor 2 Age'] & d['Actor 1 Gender'] === 'man') {
+          return 5
+        } else {
+          return 3
+        }
+      })
       .attr('stroke', d => {
         if (+d['Actor 1 Age'] > +d['Actor 2 Age'] & d['Actor 1 Gender'] === 'man') {
-          return 'red'
+          return 'black'
         } else {
           return 'none'
         }
@@ -261,6 +269,23 @@ function ready (datapoints) {
   // highlight LGBT
   d3.select('#lgbt').on('stepin', () => {
 
+    svg
+      .selectAll('.couples')
+      .transition()
+      .attr('r', d => {
+        if (d['Actor 1 Gender'] === d['Actor 2 Gender']) {
+          return 10
+        } else {
+          return 3
+        }
+      })
+      .attr('stroke', d => {
+        if (d['Actor 1 Gender'] === d['Actor 2 Gender']) {
+          return 'black'
+        } else {
+          return 'none'
+        }
+      })
   })
 
   // # stepin bond (director==='john-glen' OR 'lewis-gilbert')
