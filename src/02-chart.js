@@ -19,18 +19,6 @@ const svg = d3
   .append('g')
   .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
-// const colorScale = d3
-//   .scaleOrdinal()
-//   .range([
-//     '#8dd3c7',
-//     '#ffffb3',
-//     '#bebada',
-//     '#fb8072',
-//     '#80b1d3',
-//     '#fdb462',
-//     '#b3de69'
-//   ])
-
 var xPositionScale = d3
   .scaleLinear()
   .range([0, width])
@@ -65,7 +53,7 @@ function ready (datapoints) {
       return str
     })
     .attr('r', 0)
-    .attr('cx', width/2)
+    .attr('cx', width / 2)
     .attr('cy', 0)
     .attr('fill', function (d) {
       // color couples based on the older gender
@@ -79,6 +67,7 @@ function ready (datapoints) {
     })
     .attr('opacity', 0)
     .on('mouseover', function (d) {
+      console.log(d)
       // set up tooltip text
       div
         .transition()
@@ -91,7 +80,7 @@ function ready (datapoints) {
             d['Actor 2 Name'].bold() + ' (' + d['Actor 2 Age'] + ' y.o.)' +
             '<br/>' + 'Age difference: ' +
             d['Age Difference'] + '<br/>' +
-            'Movie: ' + d['Movie Name']
+            'Movie: ' + d['Movie Name'] + ' (' + d['Release Year'] + ')'
         )
         .style('left', d3.event.pageX + 'px')
         .style('top', d3.event.pageY - 28 + 'px')
@@ -152,7 +141,6 @@ function ready (datapoints) {
   // remove bounding box
   svg.selectAll('.domain').remove()
 
-  
   // add text. Transform translate is based on x and y pos scales
   svg
     .append('text')
@@ -183,12 +171,12 @@ function ready (datapoints) {
       .selectAll('.axis')
       .transition()
       .style('visibility', 'visible')
-    
+
     // reset circles
     svg
       .selectAll('.couples')
       .transition()
-      .duration(1500)
+      .duration(500)
       .attr('cx', d => xPositionScale(+d['Actor 1 Age']))
       .attr('cy', d => yPositionScale(+d['Actor 2 Age']))
       .attr('stroke', 'none')
@@ -212,23 +200,7 @@ function ready (datapoints) {
   })
 
   d3.select('#older-men').on('stepin', () => {
-    svg
-      .selectAll('.couples')
-      .transition()
-      .attr('r', d => {
-        if (+d['Actor 1 Age'] > +d['Actor 2 Age'] & d['Actor 1 Gender'] === 'man') {
-          return 5
-        } else {
-          return 3
-        }
-      })
-      .attr('stroke', d => {
-        if (+d['Actor 1 Age'] > +d['Actor 2 Age'] & d['Actor 1 Gender'] === 'man') {
-          return 'black'
-        } else {
-          return 'none'
-        }
-      })
+
   })
 
   // highlight same age
@@ -272,7 +244,6 @@ function ready (datapoints) {
 
   // highlight LGBT
   d3.select('#lgbt').on('stepin', () => {
-
     svg
       .selectAll('.couples')
       .transition()
