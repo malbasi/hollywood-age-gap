@@ -322,7 +322,7 @@ function ready (datapoints) {
             'Release Year: ' + d['Release Year']
             )
           .style('left', d3.event.pageX + 'px')
-          .style('top', d3.event.pageY - 28 + 'px')
+          .style('top', d3.event.pageY +10 + 'px')
 
       })
       .on('mouseout', function (d, i) {
