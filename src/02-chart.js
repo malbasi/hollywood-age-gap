@@ -65,8 +65,10 @@ function ready (datapoints) {
       return str
     })
     .attr('r', 0)
-    .attr('cx', d => xPositionScale(+d['Actor 1 Age']))
-    .attr('cy', d => yPositionScale(+d['Actor 2 Age']))
+    // .attr('cx', d => xPositionScale(+d['Actor 1 Age']))
+    // .attr('cy', d => yPositionScale(+d['Actor 2 Age']))
+    .attr('cx', width/2)
+    .attr('cy', 0)
     .attr('fill', function (d) {
       // color couples based on the older gender
       if (+d['Actor 1 Age'] > +d['Actor 2 Age'] & d['Actor 1 Gender'] === 'man') {
@@ -77,7 +79,7 @@ function ready (datapoints) {
         return '#BC5E21'
       }
     })
-    .attr('opacity', 0.8)
+    .attr('opacity', 0)
     .on('mouseover', function (d) {
       // set up tooltip text
       div
@@ -188,8 +190,12 @@ function ready (datapoints) {
     svg
       .selectAll('.couples')
       .transition()
+      .duration(1500)
+      .attr('cx', d => xPositionScale(+d['Actor 1 Age']))
+      .attr('cy', d => yPositionScale(+d['Actor 2 Age']))
       .attr('stroke', 'none')
       .attr('r', 3)
+      .attr('opacity', 0.8)
 
     // reset line
     svg
@@ -338,13 +344,26 @@ function ready (datapoints) {
     svg
       .selectAll('.couples')
       .transition()
+      .attr('cx', d => xPositionScale(+d['Actor 1 Age']))
+      .attr('cy', d => yPositionScale(+d['Actor 2 Age']))
       .attr('stroke', 'none')
       .attr('r', 3)
+      .attr('opacity', 0.8)
 
     svg
       .selectAll('#joel-coen')
       .transition()
       .attr('stroke', 'black')
       .attr('r', 10)
+  })
+
+  d3.select('#end01').on('stepin', () => {
+    svg
+      .selectAll('.couples')
+      .transition()
+      .duration(1500)
+      .attr('cx', width/2)
+      .attr('cy', height)
+      .attr('opacity',0)
   })
 }
