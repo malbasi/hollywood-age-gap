@@ -23,9 +23,7 @@ svg.append('rect')
 var xPositionScale = fisheye.scale(d3.scaleLinear)
   .range([0, width])
   .focus(width / 2)
-  .distortion(5)
-
-// var colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+  .distortion(6)
 
 d3.csv(require('./data/df_age30.csv'))
   .then(ready)
