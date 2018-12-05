@@ -65,8 +65,6 @@ function ready (datapoints) {
       return str
     })
     .attr('r', 0)
-    // .attr('cx', d => xPositionScale(+d['Actor 1 Age']))
-    // .attr('cy', d => yPositionScale(+d['Actor 2 Age']))
     .attr('cx', width/2)
     .attr('cy', 0)
     .attr('fill', function (d) {
@@ -154,7 +152,7 @@ function ready (datapoints) {
   // remove bounding box
   svg.selectAll('.domain').remove()
 
-  // START STEPIN
+  
   // add text. Transform translate is based on x and y pos scales
   svg
     .append('text')
@@ -178,7 +176,7 @@ function ready (datapoints) {
     .attr('y2', height)
     .lower()
 
-
+  // START STEPIN
   d3.select('#intro').on('stepin', () => {
     // unhide axis
     svg
@@ -358,12 +356,6 @@ function ready (datapoints) {
   })
 
   d3.select('#end01').on('stepin', () => {
-    svg
-      .selectAll('.couples')
-      .transition()
-      .duration(1500)
-      .attr('cx', width/2)
-      .attr('cy', height)
-      .attr('opacity',0)
+
   })
 }

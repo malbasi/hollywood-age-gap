@@ -15,7 +15,9 @@
           .sticky {
             position: -webkit-sticky;
             position: sticky;
+            bottom:1rem;
             top: 0;
+            align-self: flex-start;
           }
 
           .body {
@@ -61,13 +63,6 @@
             transition: 1.5s background;
             background: #fff888;
           }*/
-
-          /* Set the sticky things 2% from the top */
-          .sticky {
-            top: 1vh;
-            align-self: flex-start;  
-          }
-
 
           /* Minimum height of 70% of the screen */
           .step {
