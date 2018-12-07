@@ -28,9 +28,38 @@
             position: center;
           }
 
-          h1 {
+           h1 {
             text-align: center;
+             margin-bottom: 2rem; 
+             font-size: 28px;
+             font-weight: bold;
+             font-family: 'Merriweather', serif;
+             line-height: 1.5em;
+          }         
+
+           h2 { 
+            margin-top: 3rem; 
+            margin-bottom: 1rem;
+            color: black;
+            font-family: 'Roboto', serif;
+    /*        font-family: 'Merriweather', serif;*/
+            line-height: 1.5em;
+            font-size: 22px;
+            font-weight: bold;
+            }  
+
+          h3 { 
+            margin-top: 3rem; 
+            margin-bottom: 1rem;
+            color: black;
+            font-family: 'Roboto', serif;
+    /*        font-family: 'Merriweather', serif;*/
+            line-height: 1.5em;
+            font-size: 18px;
+            font-weight: bold;
           }
+
+
 
           #chart-1 .axis line {
             stroke: #999;
@@ -41,6 +70,22 @@
           p small {
             background: #fff880;
           }
+
+          p {
+            color: black;
+            font-family: 'Roboto', serif;
+            font-size: 16px;
+            line-height: 1.5em;
+            padding: 10px 0;
+            }
+
+          text {
+            color: black;
+            font-family: 'Roboto', serif;
+            font-size: 13px;
+            line-height: 1.5em;
+            padding: 10px 0;            
+          }
           
           .colored-text {
             padding: 1px 7px;
@@ -49,7 +94,9 @@
           
           .dark-theme {
               background-color: #F9F5EC;
-              color: #292723;   
+              color: #292723; 
+              font-family: 'Roboto', sans-serif;
+              font-weight: lighter;    
           }
 
           /* Highlight steps when you scroll into them */
