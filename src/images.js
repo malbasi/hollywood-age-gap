@@ -2,9 +2,9 @@ import * as d3 from 'd3'
 import fisheye from './fisheye'
 import { scaleLinear, scalePow } from 'd3-scale'
 
-let margin = { top: 20, left: 20, right: 20, bottom: 20 }
+let margin = { top: 100, left: 20, right: 20, bottom: 20 }
 
-let height = 300 - margin.top - margin.bottom
+let height = 400 - margin.top - margin.bottom
 let width = 900 - margin.left - margin.right
 
 let svg = d3
@@ -45,26 +45,89 @@ function ready (datapoints) {
       return `translate(${xPosition}, 0)`
     })
 
+  holders.append('text')
+    .text(d => 'Movie name: ' + d['Movie Name'] + ' ' + '(' + d['Release Year'] + ')')
+    .attr('class', d => {
+      var str = d['Movie Name'].replace(/'/g, '')
+      return 'textelem' + str.replace(/\s+/g, '-').toLowerCase()
+    })
+    .classed('movie-text', true)
+    .attr('x', 10)
+    .attr('y', -50)
+    .attr('dx', d => {
+      if (d['Movie Name'] === 'X-Men First Class') {
+        return -100
+      } else {
+        return 0
+      }
+    })
+    .attr('text-anchor', 'star')
+    .attr('fill', 'black')
+    .attr('opacity', 0)
+
+  holders.append('text')
+    .text(d => d['Actor 1 Name'] + ' ' + '(' + d['Actor 1 Age'] + ')')
+    .attr('class', d => {
+      var str = d['Movie Name'].replace(/'/g, '')
+      return 'textelem' + str.replace(/\s+/g, '-').toLowerCase()
+    })
+    .classed('movie-text', true)
+    .attr('x', 10)
+    .attr('y', -30)
+    .attr('dx', d => {
+      if (d['Movie Name'] === 'X-Men First Class') {
+        return -100
+      } else {
+        return 0
+      }
+    })
+    .attr('text-anchor', 'star')
+    .attr('fill', 'black')
+    .attr('opacity', 0)
+
+  holders.append('text')
+    .text(d => d['Actor 2 Name'] + ' ' + '(' + d['Actor 2 Age'] + ')')
+    .attr('class', d => {
+      var str = d['Movie Name'].replace(/'/g, '')
+      return 'textelem' + str.replace(/\s+/g, '-').toLowerCase()
+    })
+    .classed('movie-text', true)
+    .attr('x', 10)
+    .attr('y', -10)
+    .attr('dx', d => {
+      if (d['Movie Name'] === 'X-Men First Class') {
+        return -100
+      } else {
+        return 0
+      }
+    })
+    .attr('text-anchor', 'star')
+    .attr('fill', 'black')
+    .attr('opacity', 0)
+
   holders.append('image')
     .attr('xlink:href', d => {
       return d.image_url
     })
+    .attr('class', d => {
+      // console.log(d['Movie Name'].replace(/\s+/g, '-').toLowerCase())
+      return d['Movie Name'].replace(/\s+/g, '-').toLowerCase()
+    })
     .attr('height', height)
-
-  holders.append('rect')
-    .attr('stroke', 'none')
-    .attr('height', height)
-    .attr('width', 150)
-    .attr('fill', 'none')
-    .on('mousemove', function (d) {
-      // var number = d.TotalPageViews
-      d3.select(this)
-
-      d3.select('#movie-name').text(d['Movie Name'])
-      d3.select('#actor-1').text(d['Actor 1 Name'])
-      d3.select('#actor-2').text(d['Actor 2 Name'])
-      d3.select('#age').text(d['Actor 1 Age'])
-      d3.select('#info').style('display', 'block')
+    .on('mouseover', function (d) {
+      console.log(d)
+      var str = d['Movie Name'].replace(/'/g, '')
+      var class_selected = str.replace(/\s+/g, '-').toLowerCase()
+      // console.log(str)
+      d3.selectAll('.textelem' + class_selected).attr('opacity', 1)
+      // d3.select('#movie-title').text(d['Movie Name'])
+    })
+    .on('mouseout', function (d) {
+      console.log(d)
+      var str = d['Movie Name'].replace(/'/g, '')
+      var class_selected = str.replace(/\s+/g, '-').toLowerCase()
+      console.log('textelem' + class_selected)
+      d3.selectAll('.textelem' + class_selected).attr('opacity', 0)
     })
 
   function clamp (num, min, max) {
