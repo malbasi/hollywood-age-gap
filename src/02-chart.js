@@ -5,7 +5,7 @@ const margin = {
   top: 30,
   right: 20,
   bottom: 30,
-  left: 80
+  left: 90
 }
 
 const width = 700 - margin.left - margin.right
@@ -150,7 +150,7 @@ function ready (datapoints) {
     .attr('x', 10)
     .attr('y', 0)
     .attr('text-anchor', 'middle')
-    .attr('transform', 'translate(' + xPositionScale(75) + ',' + yPositionScale(76) + ') rotate(-45)')
+    .attr('transform', 'translate(' + xPositionScale(75) + ',' + yPositionScale(76) + ') rotate(-47)')
     .attr('opacity', 0)
 
   // add age line
