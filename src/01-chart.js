@@ -5,7 +5,7 @@ const margin = {
   top: 30,
   right: 20,
   bottom: 30,
-  left: 180
+  left: 150
 }
 
 const width = 700 - margin.left - margin.right
@@ -69,7 +69,7 @@ function ready (datapoints) {
 
   // sort nested data
   nested.sort(function (b, a) {
-    return a.values.length - b.values.length
+    return b.values.length - a.values.length
   })
 
   var names = nested.map(d => d.key)
@@ -170,7 +170,8 @@ function ready (datapoints) {
     .call(xAxis)
     .style('visibility', 'hidden')
 
-  var yAxis = d3.axisLeft(yPositionScale)
+  var yAxis = d3.axisLeft(yPositionScale).tickSize(0)
+
   svg
     .append('g')
     .transition()
@@ -178,7 +179,7 @@ function ready (datapoints) {
     .call(yAxis)
     .style('visibility', 'hidden')
 
-  svg.selectAll('.y-axis path').attr('stroke', 'none')
+  svg.selectAll('.y-axis path')
 
   // filter the datapoints for each director
   let dir1Datapoints = datapoints.filter(d => d.Director === 'Woody Allen')
@@ -202,50 +203,40 @@ function ready (datapoints) {
     svg.selectAll('.labels-text').attr('opacity', 0.9).attr('fill', d => colorScale(d.key))
 
     /* Set up axes */
-    var xAxis = d3.axisBottom(xPositionScale)
-    svg
-      .append('g')
-      .transition()
-      .attr('class', 'axis x-axis')
+    svg.selectAll('.x-axis')
       .attr('transform', 'translate(0,' + height + ')')
       .call(xAxis)
       .style('visibility', 'hidden')
 
-    var yAxis = d3.axisLeft(yPositionScale)
-    svg
-      .append('g')
-      .transition()
-      .attr('class', 'axis y-axis')
+    var yAxis = d3.axisLeft(yPositionScale).tickSize(0)
+    svg.selectAll('.y-axis')
       .call(yAxis)
-      .style('visibility', 'hidden')
+      .style('visibility', 'visible')
 
-    svg.selectAll('.y-axis path').attr('stroke', 'none')
+    // svg.selectAll('.x-axis path').attr('stroke', 'none')
+
+    svg.selectAll('.domain').remove()
   })
 
-  d3.select('#director1').on('stepin', () => {
-    var dir1MovieName = dir1Datapoints.map(d => d['Movie Name'])
-    yPositionScale.domain(dir1MovieName).range([height - 50, 180])
+  d3.select('#director5').on('stepin', () => {
+    var dir5MovieName = dir5Datapoints.map(d => d['Movie Name'])
+    yPositionScale.domain(dir5MovieName).range([(height - 45) / 2, 180])
     svg.selectAll('#act1').remove()
     svg.selectAll('#act2').remove()
     svg.selectAll('#bar').remove()
     svg.selectAll('.y-axis').remove()
     svg.selectAll('.x-axis').remove()
-
-    var xAxis = d3.axisBottom(xPositionScale)
     svg
       .append('g')
       .transition()
       .attr('class', 'axis x-axis')
-      .attr('transform', 'translate(0, ' + (height - 30) + ')')
+      .attr('transform', 'translate(0, ' + (height - 12) / 2 + ')')
       .call(xAxis)
 
-    // svg.selectAll('.x-axis').style('visibility', 'visible')
-    //   .attr('transform', 'translate(0, ' + (height - 30) + ')')
-    //   .call(xAxis)
-
+    svg.selectAll('.domain').remove()
     svg
       .selectAll('.act1')
-      .data(dir1Datapoints)
+      .data(dir5Datapoints)
       .enter()
       .append('circle')
       .attr('class', d => {
@@ -264,14 +255,14 @@ function ready (datapoints) {
       .attr('fill', d => colorScale(d.Director))
 
     svg.selectAll('.act2')
-      .data(dir1Datapoints)
+      .data(dir5Datapoints)
       .enter()
       .append('circle')
-      .transition()
       .attr('class', d => {
         return 'dif' + d['dif'] + d['Release Year'] + ' ' + d['Actor 2 Gender']
       })
       .attr('id', 'act2')
+      .transition()
       .attr('cx', d => {
         var age = +d['Actor 2 Age']
         return xPositionScale(age)
@@ -283,12 +274,12 @@ function ready (datapoints) {
       .attr('fill', d => colorScale(d.Director))
 
     svg.selectAll('.bar')
-      .data(dir1Datapoints)
+      .data(dir5Datapoints)
       .enter()
       .append('line')
-      .transition()
       .attr('class', d => 'dif' + d['dif'] + d['Release Year'])
       .attr('id', 'bar')
+      .transition()
       .attr('x1', d => {
         return xPositionScale(+d['Actor 1 Age'])
       })
@@ -297,12 +288,13 @@ function ready (datapoints) {
       .attr('y2', d => yPositionScale(d['Movie Name']))
       .attr('stroke-width', 1)
       .attr('stroke', d => colorScale(d.Director))
+      .attr('opacity', 0.5)
 
     //* MOUSEOVER PART *//
     svg.selectAll('circle')
       .on('mouseover', function (d) {
+        // console.log(d)
         var className = 'dif' + d['dif'] + d['Release Year']
-
         d3.select('circle.' + className)
           .raise()
           .transition()
@@ -332,32 +324,34 @@ function ready (datapoints) {
           .style('top', d3.event.pageY - 28 + 'px')
       })
       .on('mouseout', function (d, i) {
+        // var className = d['Movie Name'].toLowerCase().replace(/\s+/g,'')
         var className = 'dif' + d['dif'] + d['Release Year']
+        var act1Name = d['Actor 1 Name'].toLowerCase().replace(/\s+/g, '')
+        var act2Name = d['Actor 2 Name'].toLowerCase().replace(/\s+/g, '')
         div.transition().style('opacity', 0)
 
         d3.selectAll('circle.' + className)
           .transition()
           .attr('stroke', 'none')
           .attr('r', 6)
+          .attr('stroke-width', 0)
           .attr('fill', d => colorScale(d.Director))
 
         d3.selectAll('line.' + className)
           .transition()
           .attr('stroke-width', '1')
-          .attr('stroke', d => colorScale(d.Director))
       })
 
-    // this is change for label part!
     svg.selectAll('.labels').transition().attr('opacity', 0.2).attr('fill', function (d) {
+      // console.log(d.key.toLowerCase().replace(/ /g, ''))
       return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
     })
-
-    svg.selectAll('.woodyallen')
+    svg.selectAll('.jonathanlynn')
       .transition()
       .attr('opacity', 0.9)
 
     svg.selectAll('.labels-text').transition().attr('opacity', 0.2).attr('fill', d => colorScale(d.key))
-    svg.selectAll('.textwoodyallen')
+    svg.selectAll('.textjonathanlynn')
       .transition()
       .attr('opacity', 0.9)
 
@@ -365,7 +359,292 @@ function ready (datapoints) {
     svg
       .append('g')
       .attr('class', 'axis y-axis')
+      .call(yAxis)
+    svg.selectAll('.y-axis path').attr('stroke', 'none')
+  })
+
+  d3.select('#director4').on('stepin', () => {
+    var dir4MovieName = dir4Datapoints.map(d => d['Movie Name'])
+    yPositionScale.domain(dir4MovieName).range([(height - 80) / 1.5, 180])
+    svg.selectAll('#act1').remove()
+    svg.selectAll('#act2').remove()
+    svg.selectAll('#bar').remove()
+    svg.selectAll('.y-axis').remove()
+    svg.selectAll('.x-axis').remove()
+    svg
+      .append('g')
       .transition()
+      .attr('class', 'axis x-axis')
+      .attr('transform', 'translate(0, ' + (height - 50) / 1.5 + ')')
+      .call(xAxis)
+
+    svg.selectAll('.domain').remove()
+    svg
+      .selectAll('.act1')
+      .data(dir4Datapoints)
+      .enter()
+      .append('circle')
+      .attr('class', d => {
+        return 'dif' + d['dif'] + d['Release Year'] + ' ' + d['Actor 1 Gender']
+      })
+      .attr('id', 'act1')
+      .transition()
+      .attr('cx', d => {
+        var age = +d['Actor 1 Age']
+        return xPositionScale(age)
+      })
+      .attr('cy', d => {
+        return yPositionScale(d['Movie Name'])
+      })
+      .attr('r', 6)
+      .attr('fill', d => colorScale(d.Director))
+
+    svg.selectAll('.act2')
+      .data(dir4Datapoints)
+      .enter()
+      .append('circle')
+      .attr('class', d => {
+        return 'dif' + d['dif'] + d['Release Year'] + ' ' + d['Actor 2 Gender']
+      })
+      .attr('id', 'act2')
+      .transition()
+      .attr('cx', d => {
+        var age = +d['Actor 2 Age']
+        return xPositionScale(age)
+      })
+      .attr('cy', d => {
+        return yPositionScale(d['Movie Name'])
+      })
+      .attr('r', 6)
+      .attr('fill', d => colorScale(d.Director))
+
+    svg.selectAll('.bar')
+      .data(dir4Datapoints)
+      .enter()
+      .append('line')
+      .attr('class', d => 'dif' + d['dif'] + d['Release Year'])
+      .attr('id', 'bar')
+      .transition()
+      .attr('x1', d => {
+        return xPositionScale(+d['Actor 1 Age'])
+      })
+      .attr('y1', d => yPositionScale(d['Movie Name']))
+      .attr('x2', d => xPositionScale(+d['Actor 2 Age']))
+      .attr('y2', d => yPositionScale(d['Movie Name']))
+      .attr('stroke-width', 1)
+      .attr('stroke', d => colorScale(d.Director))
+      .attr('opacity', 0.5)
+
+    //* MOUSEOVER PART *//
+    svg.selectAll('circle')
+      .on('mouseover', function (d) {
+        var className = 'dif' + d['dif'] + d['Release Year']
+        d3.select('circle.' + className)
+          .raise()
+          .transition()
+          .attr('r', 10)
+          .attr('stroke-width', 1)
+          .attr('fill', '#3C5A6A')
+
+        d3.select('circle.' + className)
+          .raise()
+          .transition()
+          .attr('r', 10)
+          .attr('stroke-width', 1)
+          .attr('fill', '#BC5E21')
+
+        d3.selectAll('line.' + className)
+          .transition()
+          .attr('stroke-width', '3')
+
+        div.transition().style('opacity', 0.9)
+
+        div
+          .html(d['Actor 2 Name'] + ': ' + d['Actor 2 Age'] + '<br/>' + d['Actor 1 Name'] + ': ' + d['Actor 1 Age'] +
+            '<br/>' +
+            'Release Year: ' + d['Release Year']
+          )
+          .style('left', d3.event.pageX + 'px')
+          .style('top', d3.event.pageY - 28 + 'px')
+      })
+      .on('mouseout', function (d, i) {
+        // var className = d['Movie Name'].toLowerCase().replace(/\s+/g,'')
+        var className = 'dif' + d['dif'] + d['Release Year']
+        div.transition().style('opacity', 0)
+
+        d3.selectAll('circle.' + className)
+          .transition()
+          .attr('stroke', 'none')
+          .attr('r', 6)
+          .attr('stroke-width', 0)
+          .attr('fill', d => colorScale(d.Director))
+
+        d3.selectAll('line.' + className)
+          .transition()
+          .attr('stroke-width', '1')
+      })
+
+    svg.selectAll('.labels').transition().attr('opacity', 0.2).attr('fill', function (d) {
+      // console.log(d.key.toLowerCase().replace(/ /g, ''))
+      return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
+    })
+    svg.selectAll('.joelcoen')
+      .transition()
+      .attr('opacity', 0.9)
+
+    svg.selectAll('.labels-text').transition().attr('opacity', 0.2).attr('fill', d => colorScale(d.key))
+    svg.selectAll('.textjoelcoen')
+      .transition()
+      .attr('opacity', 0.9)
+
+    var yAxis = d3.axisLeft(yPositionScale)
+    svg
+      .append('g')
+      .attr('class', 'axis y-axis')
+      .call(yAxis)
+
+    svg.selectAll('.y-axis path').attr('stroke', 'none')
+  })
+
+  d3.select('#director3').on('stepin', () => {
+    var dir3MovieName = dir3Datapoints.map(d => d['Movie Name'])
+    yPositionScale.domain(dir3MovieName).range([(height - 50) / 2, 180])
+    svg.selectAll('#act1').remove()
+    svg.selectAll('#act2').remove()
+    svg.selectAll('#bar').remove()
+    svg.selectAll('.y-axis').remove()
+    svg.selectAll('.x-axis').remove()
+
+    svg
+      .append('g')
+      .transition()
+      .attr('class', 'axis x-axis')
+      .attr('transform', 'translate(0, ' + (height - 12) / 2 + ')')
+      .call(xAxis)
+
+    svg.selectAll('.domain').remove()
+    svg
+      .selectAll('.act1')
+      .data(dir3Datapoints)
+      .enter()
+      .append('circle')
+      .attr('class', d => {
+        return 'dif' + d['dif'] + d['Release Year'] + ' ' + d['Actor 1 Gender']
+      })
+      .attr('id', 'act1')
+      .transition()
+      .attr('cx', d => {
+        var age = +d['Actor 1 Age']
+        return xPositionScale(age)
+      })
+      .attr('cy', d => {
+        return yPositionScale(d['Movie Name'])
+      })
+      .attr('r', 6)
+      .attr('fill', d => colorScale(d.Director))
+
+    svg.selectAll('.act2')
+      .data(dir3Datapoints)
+      .enter()
+      .append('circle')
+      .attr('class', d => {
+        return 'dif' + d['dif'] + d['Release Year'] + ' ' + d['Actor 2 Gender']
+      })
+      .attr('id', 'act2')
+      .transition()
+      .attr('cx', d => {
+        var age = +d['Actor 2 Age']
+        return xPositionScale(age)
+      })
+      .attr('cy', d => {
+        return yPositionScale(d['Movie Name'])
+      })
+      .attr('r', 6)
+      .attr('fill', d => colorScale(d.Director))
+
+    svg.selectAll('.bar')
+      .data(dir3Datapoints)
+      .enter()
+      .append('line')
+      .attr('class', d => 'dif' + d['dif'] + d['Release Year'])
+      .attr('id', 'bar')
+      .transition()
+      .attr('x1', d => {
+        return xPositionScale(+d['Actor 1 Age'])
+      })
+      .attr('y1', d => yPositionScale(d['Movie Name']))
+      .attr('x2', d => xPositionScale(+d['Actor 2 Age']))
+      .attr('y2', d => yPositionScale(d['Movie Name']))
+      .attr('stroke-width', 1)
+      .attr('stroke', d => colorScale(d.Director))
+      .attr('opacity', 0.5)
+
+    //* MOUSEOVER PART *//
+    svg.selectAll('circle')
+      .on('mouseover', function (d) {
+        var className = 'dif' + d['dif'] + d['Release Year']
+        d3.select('circle.' + className)
+          .raise()
+          .transition()
+          .attr('r', 10)
+          .attr('stroke-width', 1)
+          .attr('fill', '#3C5A6A')
+
+        d3.select('circle.' + className)
+          .raise()
+          .transition()
+          .attr('r', 10)
+          .attr('stroke-width', 1)
+          .attr('fill', '#BC5E21')
+
+        d3.selectAll('line.' + className)
+          .transition()
+          .attr('stroke-width', '3')
+
+        div.transition().style('opacity', 0.9)
+
+        div
+          .html(d['Actor 2 Name'] + ': ' + d['Actor 2 Age'] + '<br/>' + d['Actor 1 Name'] + ': ' + d['Actor 1 Age'] +
+            '<br/>' +
+            'Release Year: ' + d['Release Year']
+          )
+          .style('left', d3.event.pageX + 'px')
+          .style('top', d3.event.pageY - 28 + 'px')
+      })
+      .on('mouseout', function (d, i) {
+        // var className = d['Movie Name'].toLowerCase().replace(/\s+/g,'')
+        var className = 'dif' + d['dif'] + d['Release Year']
+        div.transition().style('opacity', 0)
+
+        d3.selectAll('circle.' + className)
+          .transition()
+          .attr('stroke', 'none')
+          .attr('r', 6)
+          .attr('stroke-width', 0)
+          .attr('fill', d => colorScale(d.Director))
+
+        d3.selectAll('line.' + className)
+          .transition()
+          .attr('stroke-width', '1')
+      })
+
+    svg.selectAll('.labels').transition().attr('opacity', 0.2).attr('fill', function (d) {
+      // console.log(d.key.toLowerCase().replace(/ /g, ''))
+      return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
+    })
+    svg.selectAll('.lewisgilbert')
+      .transition()
+      .attr('opacity', 0.9)
+
+    svg.selectAll('.labels-text').transition().attr('opacity', 0.2).attr('fill', d => colorScale(d.key))
+    svg.selectAll('.textlewisgilbert')
+      .transition()
+      .attr('opacity', 0.9)
+
+    var yAxis = d3.axisLeft(yPositionScale)
+    svg
+      .append('g')
+      .attr('class', 'axis y-axis')
       .call(yAxis)
     svg.selectAll('.y-axis path').attr('stroke', 'none')
   })
@@ -385,6 +664,7 @@ function ready (datapoints) {
     //   .selectAll('.x-axis')
     //   .attr('transform', 'translate(0, ' + (height - 20) / 1.5 + ')')
     //   .call(xAxis)
+    svg.selectAll('.domain').remove()
 
     svg.selectAll('#act1').remove()
     svg.selectAll('#act2').remove()
@@ -517,24 +797,27 @@ function ready (datapoints) {
     svg.selectAll('.y-axis path').attr('stroke', 'none')
   })
 
-  d3.select('#director3').on('stepin', () => {
-    var dir3MovieName = dir3Datapoints.map(d => d['Movie Name'])
-    yPositionScale.domain(dir3MovieName).range([(height - 50) / 2, 180])
+  d3.select('#director1').on('stepin', () => {
+    var dir1MovieName = dir1Datapoints.map(d => d['Movie Name'])
+    yPositionScale.domain(dir1MovieName).range([height - 50, 180])
     svg.selectAll('#act1').remove()
     svg.selectAll('#act2').remove()
     svg.selectAll('#bar').remove()
     svg.selectAll('.y-axis').remove()
     svg.selectAll('.x-axis').remove()
 
+    var xAxis = d3.axisBottom(xPositionScale)
     svg
       .append('g')
       .transition()
       .attr('class', 'axis x-axis')
-      .attr('transform', 'translate(0, ' + (height - 12) / 2 + ')')
+      .attr('transform', 'translate(0, ' + (height - 30) + ')')
       .call(xAxis)
+    svg.selectAll('.domain').remove()
+
     svg
       .selectAll('.act1')
-      .data(dir3Datapoints)
+      .data(dir1Datapoints)
       .enter()
       .append('circle')
       .attr('class', d => {
@@ -553,14 +836,14 @@ function ready (datapoints) {
       .attr('fill', d => colorScale(d.Director))
 
     svg.selectAll('.act2')
-      .data(dir3Datapoints)
+      .data(dir1Datapoints)
       .enter()
       .append('circle')
+      .transition()
       .attr('class', d => {
         return 'dif' + d['dif'] + d['Release Year'] + ' ' + d['Actor 2 Gender']
       })
       .attr('id', 'act2')
-      .transition()
       .attr('cx', d => {
         var age = +d['Actor 2 Age']
         return xPositionScale(age)
@@ -572,12 +855,12 @@ function ready (datapoints) {
       .attr('fill', d => colorScale(d.Director))
 
     svg.selectAll('.bar')
-      .data(dir3Datapoints)
+      .data(dir1Datapoints)
       .enter()
       .append('line')
+      .transition()
       .attr('class', d => 'dif' + d['dif'] + d['Release Year'])
       .attr('id', 'bar')
-      .transition()
       .attr('x1', d => {
         return xPositionScale(+d['Actor 1 Age'])
       })
@@ -586,12 +869,12 @@ function ready (datapoints) {
       .attr('y2', d => yPositionScale(d['Movie Name']))
       .attr('stroke-width', 1)
       .attr('stroke', d => colorScale(d.Director))
-      .attr('opacity', 0.5)
 
     //* MOUSEOVER PART *//
     svg.selectAll('circle')
       .on('mouseover', function (d) {
         var className = 'dif' + d['dif'] + d['Release Year']
+
         d3.select('circle.' + className)
           .raise()
           .transition()
@@ -621,7 +904,6 @@ function ready (datapoints) {
           .style('top', d3.event.pageY - 28 + 'px')
       })
       .on('mouseout', function (d, i) {
-        // var className = d['Movie Name'].toLowerCase().replace(/\s+/g,'')
         var className = 'dif' + d['dif'] + d['Release Year']
         div.transition().style('opacity', 0)
 
@@ -629,24 +911,25 @@ function ready (datapoints) {
           .transition()
           .attr('stroke', 'none')
           .attr('r', 6)
-          .attr('stroke-width', 0)
           .attr('fill', d => colorScale(d.Director))
 
         d3.selectAll('line.' + className)
           .transition()
           .attr('stroke-width', '1')
+          .attr('stroke', d => colorScale(d.Director))
       })
 
+    // this is change for label part!
     svg.selectAll('.labels').transition().attr('opacity', 0.2).attr('fill', function (d) {
-      // console.log(d.key.toLowerCase().replace(/ /g, ''))
       return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
     })
-    svg.selectAll('.lewisgilbert')
+
+    svg.selectAll('.woodyallen')
       .transition()
       .attr('opacity', 0.9)
 
     svg.selectAll('.labels-text').transition().attr('opacity', 0.2).attr('fill', d => colorScale(d.key))
-    svg.selectAll('.textlewisgilbert')
+    svg.selectAll('.textwoodyallen')
       .transition()
       .attr('opacity', 0.9)
 
@@ -654,291 +937,9 @@ function ready (datapoints) {
     svg
       .append('g')
       .attr('class', 'axis y-axis')
+      .transition()
       .call(yAxis)
     svg.selectAll('.y-axis path').attr('stroke', 'none')
   })
 
-  d3.select('#director4').on('stepin', () => {
-    var dir4MovieName = dir4Datapoints.map(d => d['Movie Name'])
-    yPositionScale.domain(dir4MovieName).range([(height - 80) / 1.5, 180])
-    svg.selectAll('#act1').remove()
-    svg.selectAll('#act2').remove()
-    svg.selectAll('#bar').remove()
-    svg.selectAll('.y-axis').remove()
-    svg.selectAll('.x-axis').remove()
-    svg
-      .append('g')
-      .transition()
-      .attr('class', 'axis x-axis')
-      .attr('transform', 'translate(0, ' + (height - 50) / 1.5 + ')')
-      .call(xAxis)
-    svg
-      .selectAll('.act1')
-      .data(dir4Datapoints)
-      .enter()
-      .append('circle')
-      .attr('class', d => {
-        return 'dif' + d['dif'] + d['Release Year'] + ' ' + d['Actor 1 Gender']
-      })
-      .attr('id', 'act1')
-      .transition()
-      .attr('cx', d => {
-        var age = +d['Actor 1 Age']
-        return xPositionScale(age)
-      })
-      .attr('cy', d => {
-        return yPositionScale(d['Movie Name'])
-      })
-      .attr('r', 6)
-      .attr('fill', d => colorScale(d.Director))
-
-    svg.selectAll('.act2')
-      .data(dir4Datapoints)
-      .enter()
-      .append('circle')
-      .attr('class', d => {
-        return 'dif' + d['dif'] + d['Release Year'] + ' ' + d['Actor 2 Gender']
-      })
-      .attr('id', 'act2')
-      .transition()
-      .attr('cx', d => {
-        var age = +d['Actor 2 Age']
-        return xPositionScale(age)
-      })
-      .attr('cy', d => {
-        return yPositionScale(d['Movie Name'])
-      })
-      .attr('r', 6)
-      .attr('fill', d => colorScale(d.Director))
-
-    svg.selectAll('.bar')
-      .data(dir4Datapoints)
-      .enter()
-      .append('line')
-      .attr('class', d => 'dif' + d['dif'] + d['Release Year'])
-      .attr('id', 'bar')
-      .transition()
-      .attr('x1', d => {
-        return xPositionScale(+d['Actor 1 Age'])
-      })
-      .attr('y1', d => yPositionScale(d['Movie Name']))
-      .attr('x2', d => xPositionScale(+d['Actor 2 Age']))
-      .attr('y2', d => yPositionScale(d['Movie Name']))
-      .attr('stroke-width', 1)
-      .attr('stroke', d => colorScale(d.Director))
-      .attr('opacity', 0.5)
-
-    //* MOUSEOVER PART *//
-    svg.selectAll('circle')
-      .on('mouseover', function (d) {
-        var className = 'dif' + d['dif'] + d['Release Year']
-        d3.select('circle.' + className)
-          .raise()
-          .transition()
-          .attr('r', 10)
-          .attr('stroke-width', 1)
-          .attr('fill', '#3C5A6A')
-
-        d3.select('circle.' + className)
-          .raise()
-          .transition()
-          .attr('r', 10)
-          .attr('stroke-width', 1)
-          .attr('fill', '#BC5E21')
-
-        d3.selectAll('line.' + className)
-          .transition()
-          .attr('stroke-width', '3')
-
-        div.transition().style('opacity', 0.9)
-
-        div
-          .html(d['Actor 2 Name'] + ': ' + d['Actor 2 Age'] + '<br/>' + d['Actor 1 Name'] + ': ' + d['Actor 1 Age'] +
-            '<br/>' +
-            'Release Year: ' + d['Release Year']
-          )
-          .style('left', d3.event.pageX + 'px')
-          .style('top', d3.event.pageY - 28 + 'px')
-      })
-      .on('mouseout', function (d, i) {
-        // var className = d['Movie Name'].toLowerCase().replace(/\s+/g,'')
-        var className = 'dif' + d['dif'] + d['Release Year']
-        div.transition().style('opacity', 0)
-
-        d3.selectAll('circle.' + className)
-          .transition()
-          .attr('stroke', 'none')
-          .attr('r', 6)
-          .attr('stroke-width', 0)
-          .attr('fill', d => colorScale(d.Director))
-
-        d3.selectAll('line.' + className)
-          .transition()
-          .attr('stroke-width', '1')
-      })
-
-    svg.selectAll('.labels').transition().attr('opacity', 0.2).attr('fill', function (d) {
-      // console.log(d.key.toLowerCase().replace(/ /g, ''))
-      return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
-    })
-    svg.selectAll('.joelcoen')
-      .transition()
-      .attr('opacity', 0.9)
-
-    svg.selectAll('.labels-text').transition().attr('opacity', 0.2).attr('fill', d => colorScale(d.key))
-    svg.selectAll('.textjoelcoen')
-      .transition()
-      .attr('opacity', 0.9)
-
-    var yAxis = d3.axisLeft(yPositionScale)
-    svg
-      .append('g')
-      .attr('class', 'axis y-axis')
-      .call(yAxis)
-
-    svg.selectAll('.y-axis path').attr('stroke', 'none')
-  })
-
-  d3.select('#director5').on('stepin', () => {
-    var dir5MovieName = dir5Datapoints.map(d => d['Movie Name'])
-    yPositionScale.domain(dir5MovieName).range([(height - 45) / 2, 180])
-    svg.selectAll('#act1').remove()
-    svg.selectAll('#act2').remove()
-    svg.selectAll('#bar').remove()
-    svg.selectAll('.y-axis').remove()
-    svg.selectAll('.x-axis').remove()
-    svg
-      .append('g')
-      .transition()
-      .attr('class', 'axis x-axis')
-      .attr('transform', 'translate(0, ' + (height - 12) / 2 + ')')
-      .call(xAxis)
-    svg
-      .selectAll('.act1')
-      .data(dir5Datapoints)
-      .enter()
-      .append('circle')
-      .attr('class', d => {
-        return 'dif' + d['dif'] + d['Release Year'] + ' ' + d['Actor 1 Gender']
-      })
-      .attr('id', 'act1')
-      .transition()
-      .attr('cx', d => {
-        var age = +d['Actor 1 Age']
-        return xPositionScale(age)
-      })
-      .attr('cy', d => {
-        return yPositionScale(d['Movie Name'])
-      })
-      .attr('r', 6)
-      .attr('fill', d => colorScale(d.Director))
-
-    svg.selectAll('.act2')
-      .data(dir5Datapoints)
-      .enter()
-      .append('circle')
-      .attr('class', d => {
-        return 'dif' + d['dif'] + d['Release Year'] + ' ' + d['Actor 2 Gender']
-      })
-      .attr('id', 'act2')
-      .transition()
-      .attr('cx', d => {
-        var age = +d['Actor 2 Age']
-        return xPositionScale(age)
-      })
-      .attr('cy', d => {
-        return yPositionScale(d['Movie Name'])
-      })
-      .attr('r', 6)
-      .attr('fill', d => colorScale(d.Director))
-
-    svg.selectAll('.bar')
-      .data(dir5Datapoints)
-      .enter()
-      .append('line')
-      .attr('class', d => 'dif' + d['dif'] + d['Release Year'])
-      .attr('id', 'bar')
-      .transition()
-      .attr('x1', d => {
-        return xPositionScale(+d['Actor 1 Age'])
-      })
-      .attr('y1', d => yPositionScale(d['Movie Name']))
-      .attr('x2', d => xPositionScale(+d['Actor 2 Age']))
-      .attr('y2', d => yPositionScale(d['Movie Name']))
-      .attr('stroke-width', 1)
-      .attr('stroke', d => colorScale(d.Director))
-      .attr('opacity', 0.5)
-
-    //* MOUSEOVER PART *//
-    svg.selectAll('circle')
-      .on('mouseover', function (d) {
-        // console.log(d)
-        var className = 'dif' + d['dif'] + d['Release Year']
-        d3.select('circle.' + className)
-          .raise()
-          .transition()
-          .attr('r', 10)
-          .attr('stroke-width', 1)
-          .attr('fill', '#3C5A6A')
-
-        d3.select('circle.' + className)
-          .raise()
-          .transition()
-          .attr('r', 10)
-          .attr('stroke-width', 1)
-          .attr('fill', '#BC5E21')
-
-        d3.selectAll('line.' + className)
-          .transition()
-          .attr('stroke-width', '3')
-
-        div.transition().style('opacity', 0.9)
-
-        div
-          .html(d['Actor 2 Name'] + ': ' + d['Actor 2 Age'] + '<br/>' + d['Actor 1 Name'] + ': ' + d['Actor 1 Age'] +
-            '<br/>' +
-            'Release Year: ' + d['Release Year']
-          )
-          .style('left', d3.event.pageX + 'px')
-          .style('top', d3.event.pageY - 28 + 'px')
-      })
-      .on('mouseout', function (d, i) {
-        // var className = d['Movie Name'].toLowerCase().replace(/\s+/g,'')
-        var className = 'dif' + d['dif'] + d['Release Year']
-        var act1Name = d['Actor 1 Name'].toLowerCase().replace(/\s+/g, '')
-        var act2Name = d['Actor 2 Name'].toLowerCase().replace(/\s+/g, '')
-        div.transition().style('opacity', 0)
-
-        d3.selectAll('circle.' + className)
-          .transition()
-          .attr('stroke', 'none')
-          .attr('r', 6)
-          .attr('stroke-width', 0)
-          .attr('fill', d => colorScale(d.Director))
-
-        d3.selectAll('line.' + className)
-          .transition()
-          .attr('stroke-width', '1')
-      })
-
-    svg.selectAll('.labels').transition().attr('opacity', 0.2).attr('fill', function (d) {
-      // console.log(d.key.toLowerCase().replace(/ /g, ''))
-      return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
-    })
-    svg.selectAll('.jonathanlynn')
-      .transition()
-      .attr('opacity', 0.9)
-
-    svg.selectAll('.labels-text').transition().attr('opacity', 0.2).attr('fill', d => colorScale(d.key))
-    svg.selectAll('.textjonathanlynn')
-      .transition()
-      .attr('opacity', 0.9)
-
-    var yAxis = d3.axisLeft(yPositionScale)
-    svg
-      .append('g')
-      .attr('class', 'axis y-axis')
-      .call(yAxis)
-    svg.selectAll('.y-axis path').attr('stroke', 'none')
-  })
 }
