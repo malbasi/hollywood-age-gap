@@ -60,6 +60,17 @@
           }
 
 
+          h5 { 
+            margin-top: 3rem; 
+            margin-bottom: 1rem;
+            color: black;
+            font-family: 'Roboto', serif;
+            line-height: 1.5em;
+            font-size: 12px;
+            font-weight: lighter;
+          }
+
+
 
           #chart-1 .axis line {
             stroke: #999;

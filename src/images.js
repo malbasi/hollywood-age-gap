@@ -46,7 +46,7 @@ function ready (datapoints) {
     })
 
   holders.append('text')
-    .text(d => 'Movie name: ' + d['Movie Name'] + ' ' + '(' + d['Release Year'] + ')')
+    .text(d => 'Movie: ' + d['Movie Name'] + ' ' + '(' + d['Release Year'] + ')')
     .attr('class', d => {
       var str = d['Movie Name'].replace(/'/g, '')
       return 'textelem' + str.replace(/\s+/g, '-').toLowerCase()

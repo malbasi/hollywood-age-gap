@@ -325,7 +325,26 @@ function ready (datapoints) {
       .attr('r', 10)
   })
 
-  d3.select('#end01').on('stepin', () => {
+  // d3.select('#end01').on('stepin', () => {
+  // })
 
+  $(document).ready(function () {
+    BindControls()
   })
+
+  function BindControls () {
+    var movies = datapoints.map(d => d['Movie Name'])
+
+    $('#tbMovies').autocomplete({
+      source: movies,
+      minLength: 0,
+      scroll: true
+    })
+
+    // d3.select('.' + d['Movie Name'].toLowerCase().replace(/\s+/g, '-'))
+    $('#form-movies').submit(function (event) {
+      alert('Handler for .submit() called.')
+      event.preventDefault()     
+    })
+  }
 }
