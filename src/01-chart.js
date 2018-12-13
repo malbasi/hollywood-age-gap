@@ -55,12 +55,13 @@ d3.csv(require('./data/top_directors_withimg2.csv'))
   .catch(err => console.log('Failed on', err))
 
 function ready (datapoints) {
-  // set color scale domain
-  var directorName = datapoints.map(d => d['Director'])
-  colorScale.domain(directorName)
+  // // set color scale domain
+  // var directorName = datapoints.map(d => d['Director'])
+  // colorScale.domain(directorName)
 
-  var movieName = datapoints.map(d => d['Movie Name'])
-  yPositionScale.domain(movieName)
+  // // set yPositionScale domain
+  // var movieName = datapoints.map(d => d['Movie Name'])
+  // yPositionScale.domain(movieName)
 
   var nested = d3
     .nest()
@@ -76,6 +77,7 @@ function ready (datapoints) {
   // console.log(names)
   xPostion.domain(names)
 
+  // add director's images to circles
   defs.selectAll('.director-pattern')
     .data(datapoints)
     .enter().append('pattern')
@@ -95,9 +97,10 @@ function ready (datapoints) {
       return d.image_path
     })
 
-  // add label circles
+  // add label group for directors
   let labelGroup = svg.append('g').attr('id', 'label').attr('transform', 'translate(-30, 0)')
 
+  // add director images 
   labelGroup
     .selectAll('.label-circle')
     .data(nested)
@@ -116,6 +119,7 @@ function ready (datapoints) {
     .attr('opacity', 0.9)
     .style('pointer-events', 'none')
 
+  // add directors name under image
   labelGroup
     .selectAll('.label-text')
     .data(nested)
@@ -135,30 +139,30 @@ function ready (datapoints) {
     })
     .classed('labels-text', true)
 
-  // draw the average line and hide it
-  // place line for 18 y.o.
-  svg
-    .append('line')
-    .attr('x1', 50)
-    .attr('y1', 100)
-    .attr('x2', 50)
-    .attr('y2', height)
-    .attr('stroke-dasharray', ('3,5'))
-    .attr('stroke-width', 2)
-    .attr('stroke', 'red')
-    .attr('class', 'average-line')
-    .attr('opacity', 0.5)
-    .lower()
-    .style('visibility', 'hidden')
+  // // draw the average line and hide it
+  // // place line for 18 y.o.
+  // svg
+  //   .append('line')
+  //   .attr('x1', 50)
+  //   .attr('y1', 100)
+  //   .attr('x2', 50)
+  //   .attr('y2', height)
+  //   .attr('stroke-dasharray', ('3,5'))
+  //   .attr('stroke-width', 2)
+  //   .attr('stroke', 'red')
+  //   .attr('class', 'average-line')
+  //   .attr('opacity', 0.5)
+  //   .lower()
+  //   .style('visibility', 'hidden')
 
-  var xAxis = d3.axisBottom(xPositionScale)
-  svg
-    .append('g')
-    .transition()
-    .attr('class', 'axis x-axis')
-    .attr('transform', 'translate(0,' + height + ')')
-    .call(xAxis)
-    .style('visibility', 'hidden')
+  // var xAxis = d3.axisBottom(xPositionScale)
+  // svg
+  //   .append('g')
+  //   .transition()
+  //   .attr('class', 'axis x-axis')
+  //   .attr('transform', 'translate(0,' + height + ')')
+  //   .call(xAxis)
+  //   .style('visibility', 'hidden')
 
   /* Set up axes */
   var xAxis = d3.axisBottom(xPositionScale)
@@ -179,7 +183,7 @@ function ready (datapoints) {
     .call(yAxis)
     .style('visibility', 'hidden')
 
-  svg.selectAll('.y-axis path')
+  // svg.selectAll('.y-axis path')
 
   // filter the datapoints for each director
   let dir1Datapoints = datapoints.filter(d => d.Director === 'Woody Allen')
@@ -190,42 +194,47 @@ function ready (datapoints) {
 
   // Scrollytelling!
   // for each director, update the y-axis and redraw the barbells
-  d3.select('#top3').on('stepin', () => {
-    svg.selectAll('#act1').remove()
-    svg.selectAll('#act2').remove()
-    svg.selectAll('#bar').remove()
-    svg.selectAll('.y-axis').remove()
-    svg.selectAll('.average-line').style('visibility', 'hidden')
-    svg.selectAll('.x-axis').style('visibility', 'hidden')
-    svg.selectAll('.labels').attr('opacity', 0.9).attr('fill', function (d) {
-      return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
-    })
-    svg.selectAll('.labels-text').attr('opacity', 0.9).attr('fill', d => colorScale(d.key))
+  // d3.select('#top3').on('stepin', () => {
+  //   svg.selectAll('#act1').remove()
+  //   svg.selectAll('#act2').remove()
+  //   svg.selectAll('#bar').remove()
+  //   svg.selectAll('.y-axis').remove()
+  //   svg.selectAll('.average-line').style('visibility', 'hidden')
+  //   svg.selectAll('.x-axis').style('visibility', 'hidden')
+  //   svg.selectAll('.labels').attr('opacity', 0.9).attr('fill', function (d) {
+  //     return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
+  //   })
+  //   svg.selectAll('.labels-text').attr('opacity', 0.9).attr('fill', d => colorScale(d.key))
 
-    /* Set up axes */
-    svg.selectAll('.x-axis')
-      .attr('transform', 'translate(0,' + height + ')')
-      .call(xAxis)
-      .style('visibility', 'hidden')
+  //   /* Set up axes */
+  //   svg.selectAll('.x-axis')
+  //     .attr('transform', 'translate(0,' + height + ')')
+  //     .call(xAxis)
+  //     .style('visibility', 'hidden')
 
-    var yAxis = d3.axisLeft(yPositionScale).tickSize(0)
-    svg.selectAll('.y-axis')
-      .call(yAxis)
-      .style('visibility', 'visible')
+  //   var yAxis = d3.axisLeft(yPositionScale).tickSize(0)
+  //   svg.selectAll('.y-axis')
+  //     .call(yAxis)
+  //     .style('visibility', 'visible')
 
-    // svg.selectAll('.x-axis path').attr('stroke', 'none')
+  //   // svg.selectAll('.x-axis path').attr('stroke', 'none')
 
-    svg.selectAll('.domain').remove()
-  })
+  //   svg.selectAll('.domain').remove()
+  // })
 
   d3.select('#director5').on('stepin', () => {
+    // reset the yAxis domain with new movie names
     var dir5MovieName = dir5Datapoints.map(d => d['Movie Name'])
     yPositionScale.domain(dir5MovieName).range([(height - 45) / 2, 180])
+
+    // remove circles and axis from previous director
     svg.selectAll('#act1').remove()
     svg.selectAll('#act2').remove()
     svg.selectAll('#bar').remove()
     svg.selectAll('.y-axis').remove()
     svg.selectAll('.x-axis').remove()
+
+    // call the new xAxis
     svg
       .append('g')
       .transition()
@@ -233,7 +242,16 @@ function ready (datapoints) {
       .attr('transform', 'translate(0, ' + (height - 12) / 2 + ')')
       .call(xAxis)
 
+    var yAxis = d3.axisLeft(yPositionScale)
+    svg
+      .append('g')
+      .attr('class', 'axis y-axis')
+      .call(yAxis)
+    svg.selectAll('.y-axis path').attr('stroke', 'none')
+
     svg.selectAll('.domain').remove()
+
+    // place circles for actor1
     svg
       .selectAll('.act1')
       .data(dir5Datapoints)
@@ -254,6 +272,7 @@ function ready (datapoints) {
       .attr('r', 6)
       .attr('fill', d => colorScale(d.Director))
 
+    // place circles for actor 2
     svg.selectAll('.act2')
       .data(dir5Datapoints)
       .enter()
@@ -273,6 +292,7 @@ function ready (datapoints) {
       .attr('r', 6)
       .attr('fill', d => colorScale(d.Director))
 
+    // draw the connecting line
     svg.selectAll('.bar')
       .data(dir5Datapoints)
       .enter()
@@ -342,10 +362,11 @@ function ready (datapoints) {
           .attr('stroke-width', '1')
       })
 
-    svg.selectAll('.labels').transition().attr('opacity', 0.2).attr('fill', function (d) {
-      // console.log(d.key.toLowerCase().replace(/ /g, ''))
-      return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
-    })
+    svg.selectAll('.labels').transition().attr('opacity', 0.2)
+    // .attr('fill', function (d) {
+    // console.log(d.key.toLowerCase().replace(/ /g, ''))
+    // return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
+    // })
     svg.selectAll('.jonathanlynn')
       .transition()
       .attr('opacity', 0.9)
@@ -354,13 +375,6 @@ function ready (datapoints) {
     svg.selectAll('.textjonathanlynn')
       .transition()
       .attr('opacity', 0.9)
-
-    var yAxis = d3.axisLeft(yPositionScale)
-    svg
-      .append('g')
-      .attr('class', 'axis y-axis')
-      .call(yAxis)
-    svg.selectAll('.y-axis path').attr('stroke', 'none')
   })
 
   d3.select('#director4').on('stepin', () => {
@@ -457,7 +471,7 @@ function ready (datapoints) {
           .transition()
           .attr('stroke-width', '3')
 
-        div.transition().style('opacity', 0.9)
+        // div.transition().style('opacity', 0.9)
 
         div
           .html(d['Actor 2 Name'] + ': ' + d['Actor 2 Age'] + '<br/>' + d['Actor 1 Name'] + ': ' + d['Actor 1 Age'] +
@@ -484,15 +498,17 @@ function ready (datapoints) {
           .attr('stroke-width', '1')
       })
 
-    svg.selectAll('.labels').transition().attr('opacity', 0.2).attr('fill', function (d) {
-      // console.log(d.key.toLowerCase().replace(/ /g, ''))
-      return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
-    })
+    svg.selectAll('.labels').transition().attr('opacity', 0.2)
+    // .attr('fill', function (d) {
+    //   // console.log(d.key.toLowerCase().replace(/ /g, ''))
+    //   return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
+    // })
     svg.selectAll('.joelcoen')
       .transition()
       .attr('opacity', 0.9)
 
-    svg.selectAll('.labels-text').transition().attr('opacity', 0.2).attr('fill', d => colorScale(d.key))
+    svg.selectAll('.labels-text').transition().attr('opacity', 0.2)
+    // .attr('fill', d => colorScale(d.key))
     svg.selectAll('.textjoelcoen')
       .transition()
       .attr('opacity', 0.9)
@@ -628,15 +644,17 @@ function ready (datapoints) {
           .attr('stroke-width', '1')
       })
 
-    svg.selectAll('.labels').transition().attr('opacity', 0.2).attr('fill', function (d) {
-      // console.log(d.key.toLowerCase().replace(/ /g, ''))
-      return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
-    })
+    svg.selectAll('.labels').transition().attr('opacity', 0.2)
+    // .attr('fill', function (d) {
+    //   // console.log(d.key.toLowerCase().replace(/ /g, ''))
+    //   return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
+    // })
     svg.selectAll('.lewisgilbert')
       .transition()
       .attr('opacity', 0.9)
 
-    svg.selectAll('.labels-text').transition().attr('opacity', 0.2).attr('fill', d => colorScale(d.key))
+    svg.selectAll('.labels-text').transition().attr('opacity', 0.2)
+    // .attr('fill', d => colorScale(d.key))
     svg.selectAll('.textlewisgilbert')
       .transition()
       .attr('opacity', 0.9)
@@ -776,15 +794,17 @@ function ready (datapoints) {
           .attr('stroke-width', '1')
       })
 
-    svg.selectAll('.labels').transition().attr('opacity', 0.2).attr('fill', function (d) {
-      // console.log(d.key.toLowerCase().replace(/ /g, ''))
-      return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
-    })
+    svg.selectAll('.labels').transition().attr('opacity', 0.2)
+    // .attr('fill', function (d) {
+    //   // console.log(d.key.toLowerCase().replace(/ /g, ''))
+    //   return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
+    // })
     svg.selectAll('.johnglen')
       .transition()
       .attr('opacity', 0.9)
 
-    svg.selectAll('.labels-text').transition().attr('opacity', 0.2).attr('fill', d => colorScale(d.key))
+    svg.selectAll('.labels-text').transition().attr('opacity', 0.2)
+    // .attr('fill', d => colorScale(d.key))
     svg.selectAll('.textjohnglen')
       .transition()
       .attr('opacity', 0.9)
@@ -920,15 +940,17 @@ function ready (datapoints) {
       })
 
     // this is change for label part!
-    svg.selectAll('.labels').transition().attr('opacity', 0.2).attr('fill', function (d) {
-      return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
-    })
+    svg.selectAll('.labels').transition().attr('opacity', 0.2)
+    // .attr('fill', function (d) {
+    //   return 'url(#' + d.key.toLowerCase().replace(/ /g, '') + ')'
+    // })
 
     svg.selectAll('.woodyallen')
       .transition()
       .attr('opacity', 0.9)
 
-    svg.selectAll('.labels-text').transition().attr('opacity', 0.2).attr('fill', d => colorScale(d.key))
+    svg.selectAll('.labels-text').transition().attr('opacity', 0.2)
+    // .attr('fill', d => colorScale(d.key))
     svg.selectAll('.textwoodyallen')
       .transition()
       .attr('opacity', 0.9)
@@ -941,5 +963,4 @@ function ready (datapoints) {
       .call(yAxis)
     svg.selectAll('.y-axis path').attr('stroke', 'none')
   })
-
 }
