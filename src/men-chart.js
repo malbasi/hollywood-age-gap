@@ -70,17 +70,17 @@ function ready (datapoints) {
     .append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
     .each(function (d) {
-      console.log('THIS IS', d)
+      // console.log('d looks like', d)
       let svg = d3.select(this)
 
-      console.log('HERE IS  d.values', d.values)
+      // console.log('d.values looks like', d.values)
 
       svg
         .append('path')
         .datum(d.values)
         .attr('d', lineMale)
         .attr('stroke', '#3C5A6A')
-        .attr('stroke-width', 2)
+        .attr('stroke-width', 2.5)
         .attr('fill', 'none')
 
       svg
@@ -88,7 +88,7 @@ function ready (datapoints) {
         .datum(d.values)
         .attr('d', lineFemale)
         .attr('stroke', '#BC5E21')
-        .attr('stroke-width', 2)
+        .attr('stroke-width', 2.5)
         .attr('fill', 'none')
 
       svg
@@ -98,6 +98,8 @@ function ready (datapoints) {
         .attr('y', 0)
         .attr('font-size', 14)
         .attr('text-anchor', 'middle')
+        // .attr("font-weight", 'bold')
+        // .attr('fill', '#3C5A6A')
 
       // console.log(d.values)
 
