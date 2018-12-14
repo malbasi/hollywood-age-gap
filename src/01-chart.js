@@ -98,7 +98,7 @@ function ready (datapoints) {
   // add label group for directors
   let labelGroup = svg.append('g').attr('id', 'label').attr('transform', 'translate(-30, 0)')
 
-  // add director images 
+  // add director images
   labelGroup
     .selectAll('.label-circle')
     .data(nested)
@@ -249,6 +249,7 @@ function ready (datapoints) {
 
     svg.selectAll('.domain').remove()
 
+    // console.log(xPostion.domain())
     // place circles for actor1
     svg
       .selectAll('.act1')
@@ -259,6 +260,8 @@ function ready (datapoints) {
         return 'dif' + d['dif'] + d['Release Year'] + ' ' + d['Actor 1 Gender']
       })
       .attr('id', 'act1')
+      .attr('cx', d => xPostion(d.Director) - 25)
+      .attr('cy', 25)
       .transition()
       .attr('cx', d => {
         var age = +d['Actor 1 Age']
@@ -279,6 +282,8 @@ function ready (datapoints) {
         return 'dif' + d['dif'] + d['Release Year'] + ' ' + d['Actor 2 Gender']
       })
       .attr('id', 'act2')
+      .attr('cx', d => xPostion(d.Director) - 25)
+      .attr('cy', 25)
       .transition()
       .attr('cx', d => {
         var age = +d['Actor 2 Age']
@@ -297,6 +302,10 @@ function ready (datapoints) {
       .append('line')
       .attr('class', d => 'dif' + d['dif'] + d['Release Year'])
       .attr('id', 'bar')
+      .attr('x1', d => xPostion(d.Director) - 25)
+      .attr('x2', d => xPostion(d.Director) - 25)
+      .attr('y1', 25)
+      .attr('y2', 25)
       .transition()
       .attr('x1', d => {
         return xPositionScale(+d['Actor 1 Age'])
@@ -400,6 +409,8 @@ function ready (datapoints) {
         return 'dif' + d['dif'] + d['Release Year'] + ' ' + d['Actor 1 Gender']
       })
       .attr('id', 'act1')
+      .attr('cx', d => xPostion(d.Director) - 25)
+      .attr('cy', 25)
       .transition()
       .attr('cx', d => {
         var age = +d['Actor 1 Age']
@@ -419,6 +430,8 @@ function ready (datapoints) {
         return 'dif' + d['dif'] + d['Release Year'] + ' ' + d['Actor 2 Gender']
       })
       .attr('id', 'act2')
+      .attr('cx', d => xPostion(d.Director) - 25)
+      .attr('cy', 25)
       .transition()
       .attr('cx', d => {
         var age = +d['Actor 2 Age']
@@ -436,6 +449,10 @@ function ready (datapoints) {
       .append('line')
       .attr('class', d => 'dif' + d['dif'] + d['Release Year'])
       .attr('id', 'bar')
+      .attr('x1', d => xPostion(d.Director) - 25)
+      .attr('x2', d => xPostion(d.Director) - 25)
+      .attr('y1', 25)
+      .attr('y2', 25)
       .transition()
       .attr('x1', d => {
         return xPositionScale(+d['Actor 1 Age'])
@@ -546,6 +563,8 @@ function ready (datapoints) {
         return 'dif' + d['dif'] + d['Release Year'] + ' ' + d['Actor 1 Gender']
       })
       .attr('id', 'act1')
+      .attr('cx', d => xPostion(d.Director) - 25)
+      .attr('cy', 25)
       .transition()
       .attr('cx', d => {
         var age = +d['Actor 1 Age']
@@ -565,6 +584,8 @@ function ready (datapoints) {
         return 'dif' + d['dif'] + d['Release Year'] + ' ' + d['Actor 2 Gender']
       })
       .attr('id', 'act2')
+      .attr('cx', d => xPostion(d.Director) - 25)
+      .attr('cy', 25)
       .transition()
       .attr('cx', d => {
         var age = +d['Actor 2 Age']
@@ -582,6 +603,10 @@ function ready (datapoints) {
       .append('line')
       .attr('class', d => 'dif' + d['dif'] + d['Release Year'])
       .attr('id', 'bar')
+      .attr('x1', d => xPostion(d.Director) - 25)
+      .attr('x2', d => xPostion(d.Director) - 25)
+      .attr('y1', 25)
+      .attr('y2', 25)
       .transition()
       .attr('x1', d => {
         return xPositionScale(+d['Actor 1 Age'])
@@ -695,8 +720,9 @@ function ready (datapoints) {
       .attr('class', d => {
         return 'dif' + d['dif'] + d['Release Year'] + ' ' + d['Actor 1 Gender']
       })
-
       .attr('id', 'act1')
+      .attr('cx', d => xPostion(d.Director) - 25)
+      .attr('cy', 25)
       .transition()
       .attr('cx', d => {
         var age = +d['Actor 1 Age']
@@ -716,6 +742,8 @@ function ready (datapoints) {
         return 'dif' + d['dif'] + d['Release Year'] + ' ' + d['Actor 2 Gender']
       })
       .attr('id', 'act2')
+      .attr('cx', d => xPostion(d.Director) - 25)
+      .attr('cy', 25)
       .transition()
       .attr('cx', d => {
         var age = +d['Actor 2 Age']
@@ -731,6 +759,10 @@ function ready (datapoints) {
       .data(dir2Datapoints)
       .enter()
       .append('line')
+      .attr('x1', d => xPostion(d.Director) - 25)
+      .attr('x2', d => xPostion(d.Director) - 25)
+      .attr('y1', 25)
+      .attr('y2', 25)
       .transition()
       .attr('class', d => 'dif' + d['dif'] + d['Release Year'])
       .attr('id', 'bar')
@@ -842,6 +874,8 @@ function ready (datapoints) {
         return 'dif' + d['dif'] + d['Release Year'] + ' ' + d['Actor 1 Gender']
       })
       .attr('id', 'act1')
+      .attr('cx', d => xPostion(d.Director) - 25)
+      .attr('cy', 25)
       .transition()
       .attr('cx', d => {
         var age = +d['Actor 1 Age']
@@ -857,6 +891,8 @@ function ready (datapoints) {
       .data(dir1Datapoints)
       .enter()
       .append('circle')
+      .attr('cx', d => xPostion(d.Director) - 25)
+      .attr('cy', 25)
       .transition()
       .attr('class', d => {
         return 'dif' + d['dif'] + d['Release Year'] + ' ' + d['Actor 2 Gender']
@@ -876,6 +912,10 @@ function ready (datapoints) {
       .data(dir1Datapoints)
       .enter()
       .append('line')
+      .attr('x1', d => xPostion(d.Director) - 25)
+      .attr('x2', d => xPostion(d.Director) - 25)
+      .attr('y1', 25)
+      .attr('y2', 25)
       .transition()
       .attr('class', d => 'dif' + d['dif'] + d['Release Year'])
       .attr('id', 'bar')
