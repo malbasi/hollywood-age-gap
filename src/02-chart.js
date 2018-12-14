@@ -4,7 +4,7 @@ import * as d3 from 'd3'
 const margin = {
   top: 30,
   right: 20,
-  bottom: 30,
+  bottom: 45,
   left: 90
 }
 
