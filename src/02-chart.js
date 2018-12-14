@@ -46,7 +46,8 @@ function ready (datapoints) {
     .data(datapoints)
     .enter()
     .append('circle')
-    .attr('class', 'couples')
+    .attr('class', d => d['Movie Name'].toLowerCase().replace(/\s+/g, '-'))
+    .classed('couples', true)
     .attr('id', d => {
       var str = d.Director
       str = str.replace(/\s+/g, '-').toLowerCase()
@@ -325,9 +326,6 @@ function ready (datapoints) {
       .attr('r', 10)
   })
 
-  // d3.select('#end01').on('stepin', () => {
-  // })
-
   $(document).ready(function () {
     BindControls()
   })
@@ -338,13 +336,28 @@ function ready (datapoints) {
     $('#tbMovies').autocomplete({
       source: movies,
       minLength: 0,
-      scroll: true
-    })
-
-    // d3.select('.' + d['Movie Name'].toLowerCase().replace(/\s+/g, '-'))
-    $('#form-movies').submit(function (event) {
-      alert('Handler for .submit() called.')
-      event.preventDefault()     
+      scroll: true,
+      select: function (event, ui) {
+        $('#tbMovies').blur()
+        console.log('you picked', ui.item.label, ui.item.value)
+        d3.selectAll(ui.item.label)
+          .attr('class', d => d['Movie Name'].toLowerCase().replace(/\s+/g, '-'))
+        d3.selectAll('.couples')
+          .attr('fill', d => {
+            if (ui.item.label === d['Movie Name']) {
+              return '#d9a746'
+            } else {
+              return 'grey'
+            }
+          }).raise()
+          .attr('r', d => {
+            if (ui.item.label === d['Movie Name']) {
+              return 7
+            } else {
+              return 3
+            }
+          })
+      }
     })
   }
 }

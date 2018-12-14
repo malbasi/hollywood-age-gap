@@ -24,13 +24,11 @@ var defs = svg.append('defs')
 const colorScale = d3
   .scaleOrdinal()
   .range([
-    '#BC5E21',
-    '#749CA8',
-    '#DBA946',
-    '#726738',
-    '#B38971',
-    '#fdb462',
-    '#b3de69'
+    '#4b1803',
+    '#726737',
+    '#d9a746',
+    '#bb5e22',
+    '#739aa6'
   ])
 
 var xPositionScale = d3.scaleLinear()
