@@ -5,7 +5,7 @@ const margin = {
   top: 30,
   right: 20,
   bottom: 30,
-  left: 150
+  left: 190
 }
 
 const width = 700 - margin.left - margin.right

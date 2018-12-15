@@ -87,6 +87,7 @@ function ready (datapoints) {
     .text(d => d['Actor 2 Name'] + ' ' + '(' + d['Actor 2 Age'] + ')')
     .attr('class', d => {
       var str = d['Movie Name'].replace(/'/g, '')
+      console.log('textelem' + str.replace(/\s+/g, '-').toLowerCase())
       return 'textelem' + str.replace(/\s+/g, '-').toLowerCase()
     })
     .classed('movie-text', true)
@@ -112,12 +113,14 @@ function ready (datapoints) {
       return d['Movie Name'].replace(/\s+/g, '-').toLowerCase()
     })
     .classed('movie-text', true).classed('movie-text', true)
+    .attr('width', 190)
     .attr('height', height)
     .on('mouseover', function (d) {
       console.log(d)
       var str = d['Movie Name'].replace(/'/g, '')
       var class_selected = str.replace(/\s+/g, '-').toLowerCase()
-      // console.log(str)
+      console.log(str)
+      console.log(class_selected)
       d3.selectAll('.textelem' + class_selected).attr('opacity', 1)
       // d3.select('#movie-title').text(d['Movie Name'])
     })

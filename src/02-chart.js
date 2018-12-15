@@ -326,6 +326,14 @@ function ready (datapoints) {
       .attr('r', 10)
   })
 
+  d3.select('#end01').on('stepin', () => {
+     svg
+      .selectAll('.couples')
+      .attr('stroke', 'none')
+      .attr('r', 3)
+  })
+  
+
   $(document).ready(function () {
     BindControls()
   })
@@ -343,13 +351,14 @@ function ready (datapoints) {
         d3.selectAll(ui.item.label)
           .attr('class', d => d['Movie Name'].toLowerCase().replace(/\s+/g, '-'))
         d3.selectAll('.couples')
+          .raise()
           .attr('fill', d => {
             if (ui.item.label === d['Movie Name']) {
               return '#d9a746'
             } else {
               return 'grey'
             }
-          }).raise()
+          })
           .attr('r', d => {
             if (ui.item.label === d['Movie Name']) {
               return 7

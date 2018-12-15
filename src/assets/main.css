@@ -118,6 +118,7 @@
               font-weight: lighter;    
           }
 
+
           /* Highlight steps when you scroll into them */
           /* You can delete this one! */
           /*.step.entered {
@@ -132,7 +133,7 @@
 
           /* Minimum height of 70% of the screen */
           .step {
-            min-height: 75vh;
+            min-height: 100vh;
           }
 
           .step > p {
@@ -167,4 +168,25 @@
             margin-right: 0%;
             display: block;
         }
+
+  ::selection {
+          text-shadow: 0 0 0.8rem rgb(252, 185, 170);
+          background:  #f5c158;
+          color: #4b1803;
+      }
+      
+      /* unvisited link */
+      a:link {
+          color: #292723;
+      }
+      
+      /* visited link */
+      a:visited {
+          color: #292723;
+      }
+      
+      /* mouse over link */
+      a:hover {
+          color: #bb5e22;
+      }
         

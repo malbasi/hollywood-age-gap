@@ -113,6 +113,7 @@ function ready (datapoints) {
       // console.log(d['Movie Name'].replace(/\s+/g, '-').toLowerCase())
       return d['Movie Name'].replace(/\s+/g, '-').toLowerCase()
     })
+    .attr('width', 190)
     .attr('height', height)
     .on('mouseover', function (d) {
       console.log(d)

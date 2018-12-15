@@ -22,14 +22,14 @@
        <div class="row">
           <div class="offset-2 col-sm-8 mt-5 mb-5">
             <h1>A Visual Exploration of Age and On-Screen Romance</h1>
-            <p style="text-align:center">By <strong><u>Angela Wang</u></strong>, <strong><u>Julia Ledur</u></strong>, <strong><u>Matthew Albasi</u></strong>, <strong><u>Sirui Zhu</u></strong></p>
+            <p style="text-align:center">By <strong><u><a href='https://angelameiquan.myportfolio.com/'>Angela Wang</a></u></strong>, <strong><u><a href='https://julialedur.com.br/'>Júlia Ledur</a></u></strong>, <strong><u><a href='https://mattalbasi.com/'>Matthew Albasi</a></u></strong>, <strong><u><a href='https://siruizhu.github.io/'>Sirui Zhu</a></u></strong></p>
             <p>
             Over the last year, Hollywood’s ruling class of old men have faced a reckoning. The #MeToo movement has brought widespread attention to the sexism embedded in the entertainment industry. Researchers and journalists have shown that the sexism extends to everything from characters’ speaking lines to the wages of behind-the-scenes employees.
             <br><br>
-            To add to this growing body of work, we decided to take a closer look at how romantic relationships are depicted in films. Using data from Lynn Fisher’s <a href ='https://github.com/lynnandtonic/hollywood-age-gap'>Hollywood Age Gap project</a>, which has catalogued over a thousand couples in 730 movies, we explored how age and gender are broken down in relationships on screen.
+            To add to this growing body of work, we decided to take a closer look at how romantic relationships are depicted in films. Using data from Lynn Fisher’s <u><a href ='https://github.com/lynnandtonic/hollywood-age-gap'>Hollywood Age Gap project</a></u>, which has catalogued over a thousand couples in 730 movies, we explored how age and gender are broken down in relationships on screen.
+            <br><br><br><br>
+            <img src="images/filmstrip-draft-2.gif">
             <br><br><br>
-            <img src="images/filmstrip-draft-2.gif"
-            <br><br>
             It’s worth noting that the data aren’t comprehensive. Films are added to Fisher’s database by user submission and don’t reflect the entire output of Hollywood. Age difference is determined by the age of each actor upon filming, and appearances can be deceptive. But we hope our analysis reveals something about the romantic norms of the movie industry.
           </p>  
         </div>
@@ -43,11 +43,6 @@
 
       <div class="row mt-5 mb-5">   
           <div class="col-lg-8 sticky">
-
-                <form id="form-movies" style="font:14px arial">
-                        <input type="text" id="tbMovies" 
-                        placeholder="Search for a movie" onfocus="this.value=''"/>
-                        </form>
         
              <div id="chart-2"></div>
           </div>
@@ -71,7 +66,13 @@
                 </p>
              </div>
              <div class='step' id="coen"><p>Ditto with relationships in Coen Brothers films.</p></div>
-             <div class='step' id="end01"></div>
+             <div class='step' id="end01">
+              <p><strong>Explore it yourself!</strong></p>
+               <form id="form-movies" style="font:14px arial">
+                        <input type="text" id="tbMovies" 
+                        placeholder="Search for a movie" onfocus="this.value=''"/>
+                        </form>
+             </div>
           </div>
      </div>
 
@@ -131,27 +132,27 @@
           <div class="col-lg-4">
             <div class="col-lg-10">
               <div class = 'step' id = 'top3'>
-                <p><strong>Hover over the circles</strong> to see the couples information.</p>
+                <p><strong style="font-weight: 600">Hover over the circles</strong> to see the couples information.</p>
               </div>  
               <div class='step' id="director5">
+                <img src="images/jonathan-cropped.png" style="padding: 10px 10px;">
                 <p>British comedy director <span style="color: #4b1803; background: #d9d9d9; font-weight: bold">Jonathan Lynn’s</span> films had an average romantic age gap of 19.3 years. The three movies here represent under a third of his directorial credits.</p>
-                 <img src="images/jonathan-lynn.jpg" style="padding: 40px 40px;">
               </div>
               <div class='step' id="director4">
+                <img src="images/joel-cropped.png" style="padding: 10px 10px;">
                 <p>Teaming up with his brother Ethan, <span style="color: #726737; background: #d9d9d9;font-weight: bold">Joel Coen</span> has directed over 17 films, 4 of which were included in The Hollywood Age Gap project. The average romantic age gap in these movies — which span nearly three decades — was 19.3 years.</p>
-                <img src="images/joel-coen.jpg" style="padding: 10px 40px;">
               </div>
               <div class='step' id="director3">
+                <img src="images/lewis-cropped.png" style="padding: 10px 10px;">
                 <p><span style="color: #d9a746; background: #d9d9d9; font-weight: bold">Lewis Gilbert’s</span> three contributions to the Bond film series, directed in the ‘60s and ‘70s, had an average romantic age gap of 17 years.</p>
-                <img src="images/lewis-gilbert.jpg" style="padding: 10px 40px;">
               </div>
               <div class ='step' id ='director2'>
-                  <p>The five Bond films directed by <span style="color: #bb5e22; background: #d9d9d9; font-weight: bold">John Glen</span> in the 1980s had an average romantic age gap of 19.9 years. </p>
-                  <img src="images/john-glen.jpg" style="padding: 10px 40px;">
+                <img src="images/john-cropped.png" style="padding: 10px 10px;">
+                  <p>The five Bond films directed by <span style="color: #bb5e22; background: #d9d9d9; font-weight: bold">John Glen</span> in the 1980s had an average romantic age gap of 19.9 years. </p> 
               </div>
               <div class = 'step' id = 'director1'>
-                  <p>Twenty of <span style="color: #739aa6; background: #d9d9d9; font-weight: bold">Woody Allen’s</span> films — which represent about a third of his work — were included in the dataset. The romantic relationships in these movies averaged in at 20.2 years.</p>
-                  <img src="images/woody-allen.jpg" style="padding: 10px 40px;">
+                <img src="images/woody-cropped.png" style="padding: 10px 10px;">
+                  <p>Twenty of <span style="color: #739aa6; background: #d9d9d9; font-weight: bold">Woody Allen’s</span> films — which represent about a third of his work — were included in the dataset. The romantic relationships in these movies averaged in at 20.2 years.</p>                 
               </div>
           </div></div>
       </div>
